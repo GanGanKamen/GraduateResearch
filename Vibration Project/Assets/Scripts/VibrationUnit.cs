@@ -7,29 +7,47 @@ namespace Interface
     public class VibrationUnit
     {
         public UnitCategoly VibrationUnitCategoly;
+        public bool IsVibrating { get { return isVibrating; } }
+
+        private bool isVibrating = false;
 
         public VibrationUnit(UnitCategoly _unitCategoly)
         {
             VibrationUnitCategoly = _unitCategoly;
         }
 
-        public void PlayVibrationOneShot(float leftPower, float rightPower,float time)
+        public void PlayVibrationOneShot(VibrationSystem vibrationSystem, float leftPower, float rightPower,float time)
         {
+            vibrationSystem.StartCoroutine(OneShotCoroutine(leftPower, rightPower, time));
+        }
+        
+        private IEnumerator OneShotCoroutine(float leftPower, float rightPower, float time)
+        {
+            if (isVibrating) yield break;
+            isVibrating = true;
             var direction = UnitCategolyToPlayerIndex();
             XInputDotNetPure.GamePad.SetVibration(direction, leftPower, rightPower);
-            float progressTime = 0;
-            do
-            {
-                progressTime += Time.deltaTime;
-                Debug.Log(progressTime);
-            } while (progressTime <= time);
+            yield return new WaitForSeconds(time);
             XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
+            isVibrating = false;
+            Debug.Log("x");
+            yield break;
         }
-
+        
         public void PlayVibration(float leftPower,float rightPower)
         {
+            if (isVibrating) return;
             var direction = UnitCategolyToPlayerIndex();
             XInputDotNetPure.GamePad.SetVibration(direction, leftPower, rightPower);
+            isVibrating = true;
+        }
+
+        private void StopVibration()
+        {
+            if (isVibrating == false) return;
+            var direction = UnitCategolyToPlayerIndex();
+            XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
+            isVibrating = false;
         }
 
         private XInputDotNetPure.PlayerIndex UnitCategolyToPlayerIndex()

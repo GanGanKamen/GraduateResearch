@@ -36,7 +36,7 @@ namespace Interface
 
         void Start()
         {
-            //Debug.Log(vibrationUnits[1].VibrationUnitCategoly);
+
         }
 
 
@@ -44,7 +44,8 @@ namespace Interface
         {
             if (Input.GetKeyDown(KeyCode.A))
             {
-                vibrationUnits[1].PlayVibrationOneShot(1, 1, 100);
+                vibrationUnits[1].PlayVibrationOneShot(this,1, 1, 100);
+                
             }
         }
 
