@@ -30,7 +30,6 @@ namespace Interface
             yield return new WaitForSeconds(time);
             XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
             isVibrating = false;
-            Debug.Log("x");
             yield break;
         }
         

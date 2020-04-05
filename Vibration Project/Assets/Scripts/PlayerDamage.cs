@@ -7,7 +7,7 @@ namespace player
     public class PlayerDamage : MonoBehaviour
     {
         [SerializeField] private UI.DamageCanvas damageCanvas;
-
+        [SerializeField] private Interface.VibrationSystem vibrationSystem;
         void Start()
         {
 
@@ -21,7 +21,8 @@ namespace player
 
         private void HitBullet(Attack.Bullet bullet)
         {
-            damageCanvas.SetMarkActive(bullet.master.transform);
+            if(damageCanvas != null)damageCanvas.SetMarkActive(bullet.master.transform);
+            if (vibrationSystem != null) vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
             Destroy(bullet.gameObject);
         }
 

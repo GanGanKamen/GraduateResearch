@@ -6,12 +6,14 @@ namespace Interface
 {
     public class VibrationSystem : MonoBehaviour
     {
+        [SerializeField][Range(0,1)] private float vibrationPower;
+        [SerializeField] private float vibrationTime;
         private VibrationUnit[] vibrationUnits;
 
         private void Awake()
         {
             List<VibrationUnit> vibrationUnitList = new List<VibrationUnit>();
-            for(int i =0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var direction = UnitCategoly.Foward;
                 switch (i)
@@ -34,26 +36,75 @@ namespace Interface
             vibrationUnits = vibrationUnitList.ToArray();
         }
 
-        void Start()
+        void Update()
         {
 
         }
 
-
-        void Update()
+        public void TestOutput(float angle)
         {
-            if (Input.GetKeyDown(KeyCode.A))
+            Debug.Log(AngleToDirectionNumber(angle));
+        }
+
+        public void PlayVibration(float angle)
+        {
+            var dirNum = AngleToDirectionNumber(angle);
+            /*
+            switch (dirNum)
             {
-                vibrationUnits[1].PlayVibrationOneShot(this,1, 1, 100);
-                
+                default:
+                    vibrationUnits[0].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    break;
+                case 1:
+                    vibrationUnits[0].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    vibrationUnits[1].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    break;
+                case 2:
+                    vibrationUnits[1].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    break;
+                case 3:
+                    vibrationUnits[1].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    vibrationUnits[2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    break;
+                case 4:
+                    vibrationUnits[2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    break;
+                case 5:
+                    vibrationUnits[2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    vibrationUnits[3].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                    break;
+            }
+            */
+            if(dirNum >= 7)
+            {
+                vibrationUnits[0].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                vibrationUnits[3].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+            }
+            else if(dirNum % 2 == 0)
+            {
+                vibrationUnits[dirNum / 2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+            }
+            else
+            {
+                vibrationUnits[(dirNum + 1) / 2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                vibrationUnits[(dirNum - 1) / 2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
             }
         }
 
-        private void HitPointToUnitDirectin(Vector3 hitPoint,Vector3 damagedCharacter)
+        private int AngleToDirectionNumber(float angle)
         {
-            var hitPoint0 = new Vector3(hitPoint.x, 0, hitPoint.z);
-            var damagedCharacter0 = new Vector3(damagedCharacter.x, 0, damagedCharacter.z);
+            float angleDelta = 360f / 8f;
+            float startAngle = 0 + angleDelta / 2f;
+            if (angle > startAngle && angle <= 360f - startAngle)
+            {
+                return (int)Mathf.Ceil((angle - startAngle) / angleDelta);
+            }
+            else
+            {
+                return 0;
+            }
         }
+
     }
 }
 

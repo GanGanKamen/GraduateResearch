@@ -7,6 +7,7 @@ namespace UI
 {
     public class DamageCanvas : MonoBehaviour
     {
+        public float MarkAngle { get { return center.localEulerAngles.z; } }
         [HideInInspector] public Transform targetEnemy;
         public bool IsDamaged { get { return isDamaged; } }
         private Transform player;
@@ -53,6 +54,7 @@ namespace UI
             {
                 center.localEulerAngles = new Vector3(0, 0, CenterAngle());
             }
+            //Debug.Log(center.localEulerAngles.z); //Range 0 ~ 360 反時計回り
         }
 
         private float CenterAngle()
@@ -62,7 +64,7 @@ namespace UI
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
             float rad = Mathf.Atan2(dy, dx);
-            return rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f;
+            return rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f; //angleRange:-180 ~ 180
         }
     }
 }
