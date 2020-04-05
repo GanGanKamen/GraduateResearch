@@ -9,8 +9,8 @@ namespace UI
     {
         [HideInInspector] public Transform targetEnemy;
         public bool IsDamaged { get { return isDamaged; } }
+        private Transform player;
         [SerializeField] private Transform target0;
-        [SerializeField] private Transform player;
         [SerializeField] private RectTransform center;
         [SerializeField] private GameObject mark;
         [SerializeField] private float activeTime;
@@ -20,15 +20,12 @@ namespace UI
         void Start()
         {
             mark.SetActive(false);
+            player = GameObject.FindGameObjectWithTag("Player").transform;
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                SetMarkActive(target0);
-            }
             MarkRotate();
         }
 
@@ -43,12 +40,10 @@ namespace UI
             isDamaged = true;
             targetEnemy = _target;
             mark.SetActive(true);
-            Debug.Log("active");
             yield return new WaitForSeconds(activeTime);
             mark.SetActive(false);
-            targetEnemy = null;
+            //targetEnemy = null;
             isDamaged = false;
-            Debug.Log("activeFalse");
             yield break;
         }
 
@@ -67,7 +62,7 @@ namespace UI
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
             float rad = Mathf.Atan2(dy, dx);
-            return rad * Mathf.Rad2Deg - 90f;
+            return rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f;
         }
     }
 }
