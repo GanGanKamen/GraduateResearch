@@ -7,6 +7,7 @@ namespace Enemy
     public class EnemyBase : MonoBehaviour
     {
         public GameObject bullet;
+        [SerializeField] private AudioClip beamClip;
         [SerializeField] private Transform playerTest;
         [SerializeField] private Transform head;
         [SerializeField] private Transform muzzle;
@@ -52,6 +53,7 @@ namespace Enemy
         private IEnumerator Shoot(int shootNum, float intervalTime)
         {
             if (isAttack) yield break;
+            GetComponent<AudioSource>().PlayOneShot(beamClip);
             isAttack = true;
             for(int i = 0; i < shootNum; i++)
             {

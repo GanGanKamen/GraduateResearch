@@ -6,6 +6,7 @@ namespace player
 {
     public class PlayerDamage : MonoBehaviour
     {
+        [SerializeField] private AudioClip hitAudio;
         [SerializeField] private UI.DamageCanvas damageCanvas;
         [SerializeField] private Interface.VibrationSystem vibrationSystem;
         void Start()
@@ -23,6 +24,7 @@ namespace player
         {
             if(damageCanvas != null)damageCanvas.SetMarkActive(bullet.master.transform);
             if (vibrationSystem != null) vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
+            GetComponent<AudioSource>().PlayOneShot(hitAudio);
             Destroy(bullet.gameObject);
         }
 
