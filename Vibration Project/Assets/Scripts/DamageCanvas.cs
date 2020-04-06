@@ -8,7 +8,7 @@ namespace UI
     public class DamageCanvas : MonoBehaviour
     {
         public float MarkAngle { get { return center.localEulerAngles.z; } }
-        [HideInInspector] public Transform targetEnemy;
+        [HideInInspector] public Transform target;
         public bool IsDamaged { get { return isDamaged; } }
         private Transform player;
         [SerializeField] private Transform target0;
@@ -39,18 +39,21 @@ namespace UI
         {
             if (isDamaged) yield break;
             isDamaged = true;
-            targetEnemy = _target;
+            var target0 = new GameObject();
+            target0.transform.position = _target.position;
+            target = target0.transform;
             mark.SetActive(true);
             yield return new WaitForSeconds(activeTime);
             mark.SetActive(false);
             //targetEnemy = null;
             isDamaged = false;
+            Destroy(target0);
             yield break;
         }
 
         private void MarkRotate()
         {
-            if (targetEnemy != null)
+            if (target != null)
             {
                 center.localEulerAngles = new Vector3(0, 0, CenterAngle());
             }
@@ -59,7 +62,7 @@ namespace UI
 
         private float CenterAngle()
         {
-            var targetPos = new Vector2(targetEnemy.position.x, targetEnemy.position.z);
+            var targetPos = new Vector2(target.position.x, target.position.z);
             var playerPos = new Vector2(player.position.x, player.position.z);
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
