@@ -1,0 +1,3 @@
+﻿  Sample-dll-Test.cpp
+c:\users\gangankamen\documents\graduateresearch\sample-dll-test\sample-dll-test\sample-dll-test.cpp(5): warning C4067: プリプロセッサ ディレクティブの後に余分な文字がありました - 改行が必要です
+  Sample-dll-Test.vcxproj -> C:\Users\GanGanKamen\Documents\GraduateResearch\Sample-dll-Test\x64\Debug\Sample-dll-Test.exe
