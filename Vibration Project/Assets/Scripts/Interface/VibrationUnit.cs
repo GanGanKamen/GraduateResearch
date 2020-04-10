@@ -33,6 +33,22 @@ namespace Interface
             yield break;
         }
         
+        private IEnumerator VibrationEffectCoroutine(VibrationEffect vibrationEffect)
+        {
+            if (isVibrating) yield break;
+            isVibrating = true;
+            GameObject ctrlObj = new GameObject("VibrationControll");
+            ctrlObj.AddComponent<VibrationControll>();
+            ctrlObj.GetComponent<VibrationControll>().Init(vibrationEffect, UnitCategolyToPlayerIndex());
+            var left = vibrationEffect.LeftMoterCurve;
+            var right = vibrationEffect.RightMoterCurve;
+            float time = Mathf.Max(left.keys[left.length - 1].time,right.keys[right.length -1].time);
+            yield return new WaitForSeconds(time);
+            GameObject.Destroy(ctrlObj);
+            StopVibration();
+            yield break;
+        }
+
         public void PlayVibration(float leftPower,float rightPower)
         {
             if (isVibrating) return;
@@ -41,7 +57,7 @@ namespace Interface
             isVibrating = true;
         }
 
-        private void StopVibration()
+        public void StopVibration()
         {
             if (isVibrating == false) return;
             var direction = UnitCategolyToPlayerIndex();

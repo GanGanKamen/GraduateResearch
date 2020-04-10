@@ -38,7 +38,21 @@ namespace Interface
 
         void Update()
         {
-
+            //テスト用
+            /*
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                XInputDotNetPure.GamePad.SetVibration(0, 0.2f, 0.2f);
+            }
+            else if (Input.GetKeyDown(KeyCode.S))
+            {
+                XInputDotNetPure.GamePad.SetVibration(0, 0, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                XInputDotNetPure.GamePad.SetVibration(0, 3f, 3f);
+            }
+            */
         }
 
         public void TestOutput(float angle)
