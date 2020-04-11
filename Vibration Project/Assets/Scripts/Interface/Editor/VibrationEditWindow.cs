@@ -20,14 +20,20 @@ namespace Interface
         void OnGUI()
         {
             GUILayout.Label("Setting", EditorStyles.boldLabel);
-            EditorGUILayout.TextField("Name", defultName);            
+            defultName = EditorGUILayout.TextField("Name", defultName);            
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("LeftMoter");
-            EditorGUILayout.CurveField(leftCurveField);
+            leftCurveField = EditorGUILayout.CurveField(leftCurveField);
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("RightMoter");
-            EditorGUILayout.CurveField(rightCurveField);
-
+            rightCurveField = EditorGUILayout.CurveField(rightCurveField);
+            EditorGUILayout.Space();
+            if (GUILayout.Button("Create"))
+            {
+                GameObject gameObject = new GameObject(defultName);
+                gameObject.AddComponent<VibrationEffect>();
+                gameObject.GetComponent<VibrationEffect>().Init(leftCurveField, rightCurveField);
+            }
         }
     }
 }

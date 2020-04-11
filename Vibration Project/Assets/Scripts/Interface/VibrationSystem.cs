@@ -6,6 +6,7 @@ namespace Interface
 {
     public class VibrationSystem : MonoBehaviour
     {
+        [SerializeField] private VibrationEffect effect;
         [SerializeField][Range(0,1)] private float vibrationPower;
         [SerializeField] private float vibrationTime;
         private VibrationUnit[] vibrationUnits;
