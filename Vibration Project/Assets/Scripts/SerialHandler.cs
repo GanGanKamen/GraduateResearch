@@ -28,14 +28,17 @@ namespace Interface
         // Update is called once per frame
         void Update()
         {
-
+            if (isMessageReceived)
+            {
+                OnDataReceived(message);
+            }
+            isMessageReceived = false;
         }
 
         private void Open()
         {
             serialPort = new SerialPort(portName, baudRate);
             serialPort.Open();
-            isRunning = true;
             thread = new Thread(Read);
             thread.Start();
         }
