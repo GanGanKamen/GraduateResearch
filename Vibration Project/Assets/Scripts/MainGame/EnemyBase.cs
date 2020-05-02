@@ -4,9 +4,17 @@ using UnityEngine;
 
 namespace Enemy
 {
+    public enum Type
+    {
+        Burst,  //最初期
+        Normal  //実験用
+    }
+
     public class EnemyBase : MonoBehaviour
     {
-        public GameObject bullet;
+        [SerializeField] private GameObject bullet;
+        public Type type;
+        [SerializeField] private LineRenderer myBeam;
         [SerializeField] private AudioClip beamClip;
         [SerializeField] private Transform playerTest;
         [SerializeField] private Transform head;
@@ -23,6 +31,14 @@ namespace Enemy
 
         void Update()
         {
+            switch (type)
+            {
+                case Type.Burst:
+                    LookAtTarget();
+                    break;
+                case Type.Normal:
+                    break;
+            }
             LookAtTarget();
         }
 
@@ -49,6 +65,18 @@ namespace Enemy
             }
             
         }
+        private IEnumerator OneShoot(float intervalTime)
+        {
+            if (isAttack) yield break;
+            GetComponent<AudioSource>().PlayOneShot(beamClip);
+            isAttack = true;
+            myBeam.gameObject.SetActive(true);
+            myBeam.SetPosition(1, playerTest.transform.position + Vector3.up);
+            yield return new WaitForSeconds(intervalTime);
+            myBeam.gameObject.SetActive(false);
+            isAttack = false;
+            yield break;
+        }
 
         private IEnumerator Shoot(int shootNum, float intervalTime)
         {
@@ -58,7 +86,7 @@ namespace Enemy
             for(int i = 0; i < shootNum; i++)
             {
                 GameObject bulletObj = Instantiate(bullet, muzzle.position, Quaternion.identity);
-                bulletObj.GetComponent<Attack.Bullet>().Init(playerTest.position,bulletSpeed,this);
+                bulletObj.GetComponent<Attack.Bullet>().Init(playerTest.position,bulletSpeed,this.transform);
                 yield return new WaitForSeconds(intervalTime);
             }
             isAttack = false;

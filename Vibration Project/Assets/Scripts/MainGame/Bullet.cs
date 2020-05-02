@@ -6,17 +6,17 @@ namespace Attack
 {
     public class Bullet : MonoBehaviour
     {
-        public Enemy.EnemyBase master;
+        public Transform master;
         private Vector3 goalPosition;
         private float speed;
 
-        public void Init(Vector3 _goalPos ,float _speed, Enemy.EnemyBase _master)
+        public void Init(Vector3 _goalPos ,float _speed,Transform _master)
         {
             goalPosition = _goalPos;
             speed = _speed;
             master = _master;
-            var rotVec = (_goalPos - transform.position).normalized;
-            transform.LookAt(rotVec);
+            //var rotVec = (_goalPos - transform.position).normalized;
+            transform.LookAt(goalPosition);
             gameObject.AddComponent<Rigidbody>();
             var rb = GetComponent<Rigidbody>();
             rb.useGravity = false;

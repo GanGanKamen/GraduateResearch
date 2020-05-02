@@ -16,11 +16,13 @@ namespace player
         public string playerName;
         public SexGroup sex;
         public int playerSkill;
+        public int age;
 
-        public BaseInfo(string _name, SexGroup _sex,int _playerSkill)
+        public BaseInfo(string _name, SexGroup _sex,int _age,int _playerSkill)
         {
             playerName = _name;
             sex = _sex;
+            age = _age;
             if (_playerSkill <= 0) playerSkill = 0;
             else if (_playerSkill >= 3) playerSkill = 3;
             else playerSkill = _playerSkill;

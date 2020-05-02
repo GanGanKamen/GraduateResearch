@@ -8,6 +8,7 @@ public class TestSerial : MonoBehaviour
     [SerializeField]Interface.SerialHandler serialHandler;
     [SerializeField] Button onButton;
     [SerializeField] Button offButton;
+
     // Start is called before the first frame update
     void Start()
     {

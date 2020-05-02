@@ -22,7 +22,7 @@ namespace player
 
         private void HitBullet(Attack.Bullet bullet)
         {
-            if(damageCanvas != null)damageCanvas.SetMarkActive(bullet.master.transform);
+            if (damageCanvas != null) damageCanvas.SetMarkActive(bullet.master);
             if (vibrationSystem != null) vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
             GetComponent<AudioSource>().PlayOneShot(hitAudio);
             Destroy(bullet.gameObject);
@@ -32,7 +32,12 @@ namespace player
         {
             if (other.CompareTag("Attack"))
             {
-                HitBullet(other.GetComponent<Attack.Bullet>());
+                var bullet = other.GetComponent<Attack.Bullet>();
+                if (bullet.master != transform)
+                {
+                    HitBullet(other.GetComponent<Attack.Bullet>());
+                }
+
             }
         }
     }
