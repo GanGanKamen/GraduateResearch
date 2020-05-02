@@ -7,26 +7,43 @@ namespace Enemy
     public enum Type
     {
         Burst,  //最初期
-        Normal  //実験用
+        Tutorial, //チュートリアル用
+        Experiment  //実験用
     }
 
     public class EnemyBase : MonoBehaviour
     {
         [SerializeField] private GameObject bullet;
+        [SerializeField] private GameObject explosionEffect;
         public Type type;
-        [SerializeField] private LineRenderer myBeam;
         [SerializeField] private AudioClip beamClip;
         [SerializeField] private Transform playerTest;
         [SerializeField] private Transform head;
         [SerializeField] private Transform muzzle;
         [SerializeField] private float searchDistance;
         [SerializeField] private float bulletSpeed;
+
         private float standbyCount = 0;
-        private float standbyTime = 1;
         private bool isAttack = false;
+
+        private Experiment.ExperimentManager experimentManager;
+
+        public void Init(Vector3 _position,Transform _player, Experiment.ExperimentManager _mng)
+        {
+            transform.position = _position;
+            experimentManager = _mng;
+            playerTest = _player;
+            type = Type.Experiment;
+        }
+
+
         void Start()
         {
-            playerTest = GameObject.FindGameObjectWithTag("Player").transform;
+            if(type != Type.Experiment)
+            {
+                playerTest = GameObject.FindGameObjectWithTag("Player").transform;
+            }
+            
         }
 
         void Update()
@@ -34,21 +51,23 @@ namespace Enemy
             switch (type)
             {
                 case Type.Burst:
+                    BurstAction();
+                    break;
+                case Type.Tutorial:
                     LookAtTarget();
                     break;
-                case Type.Normal:
+                case Type.Experiment:
                     break;
             }
-            LookAtTarget();
         }
 
-        private void LookAtTarget()
+        private void BurstAction()
         {
             var dis = Vector3.Distance(playerTest.position, transform.position);
             if(dis <= searchDistance)
             {
                 head.LookAt(playerTest.position + Vector3.up);
-                if(standbyCount >= standbyTime)
+                if(standbyCount >= 1)
                 {
                     standbyCount = 0;
                     StartCoroutine(Shoot(3,0.2f));
@@ -58,22 +77,20 @@ namespace Enemy
                     if(isAttack == false)standbyCount += Time.deltaTime;
                 }
                 
-            }
-            else
-            {
-                
-            }
-            
+            }           
         }
+
+        private void LookAtTarget()
+        {
+            head.LookAt(playerTest.position + Vector3.up);
+        }
+
         private IEnumerator OneShoot(float intervalTime)
         {
             if (isAttack) yield break;
-            GetComponent<AudioSource>().PlayOneShot(beamClip);
             isAttack = true;
-            myBeam.gameObject.SetActive(true);
-            myBeam.SetPosition(1, playerTest.transform.position + Vector3.up);
+
             yield return new WaitForSeconds(intervalTime);
-            myBeam.gameObject.SetActive(false);
             isAttack = false;
             yield break;
         }
@@ -91,6 +108,20 @@ namespace Enemy
             }
             isAttack = false;
             yield break;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Attack"))
+            {
+                switch (type)
+                {
+                    default:
+                        break;
+                }
+                Instantiate(explosionEffect, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+            }
         }
     }
 }

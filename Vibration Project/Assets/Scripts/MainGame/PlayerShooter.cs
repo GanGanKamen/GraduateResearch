@@ -7,6 +7,7 @@ namespace player
     public class PlayerShooter : MonoBehaviour
     {
         [SerializeField] private GameObject bullet;
+        [SerializeField] private GameObject fireEffect;
         [SerializeField] private float bulletSpeed;
         [SerializeField] private float shootCoolDownTime;
         [SerializeField] private Transform muzzle;
@@ -41,6 +42,7 @@ namespace player
                 GameObject bulletObj = Instantiate(bullet, muzzle.position, Quaternion.identity);
                 var foward = muzzle.position - gun.position;
                 bulletObj.GetComponent<Attack.Bullet>().Init(muzzle.position + foward, bulletSpeed, this.transform);
+                if (fireEffect.activeSelf == false) fireEffect.SetActive(true);
             }
             else
             {
@@ -51,6 +53,7 @@ namespace player
         private void ShootOver()
         {
             shootCoolDownCount = 0;
+            fireEffect.SetActive(false);
         }
 
         private IEnumerator ShootCoroutine()
