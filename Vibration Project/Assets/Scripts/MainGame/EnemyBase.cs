@@ -28,22 +28,18 @@ namespace Enemy
 
         private Experiment.ExperimentManager experimentManager;
 
-        public void Init(Vector3 _position,Transform _player, Experiment.ExperimentManager _mng)
+        public float saveUntilDestoryTime = 0;
+
+        public void Init(Vector3 _position,Transform _player, Experiment.ExperimentManager _mng,Type _type)
         {
             transform.position = _position;
             experimentManager = _mng;
             playerTest = _player;
-            type = Type.Experiment;
-        }
-
-
-        void Start()
-        {
-            if(type != Type.Experiment)
+            type = _type;
+            if(type == Type.Experiment)
             {
-                playerTest = GameObject.FindGameObjectWithTag("Player").transform;
+                standbyCount = 2;
             }
-            
         }
 
         void Update()
@@ -57,6 +53,7 @@ namespace Enemy
                     LookAtTarget();
                     break;
                 case Type.Experiment:
+                    ExperimentAction();
                     break;
             }
         }
@@ -78,6 +75,22 @@ namespace Enemy
                 }
                 
             }           
+        }
+
+        private void ExperimentAction()
+        {
+            if(standbyCount >= 2)
+            {
+                standbyCount = 0;
+                experimentManager.GetDamageFromEnemy(transform);
+                LookAtTarget();
+            }
+            else
+            {
+                standbyCount += Time.deltaTime;
+            }
+
+            saveUntilDestoryTime += Time.deltaTime;
         }
 
         private void LookAtTarget()
@@ -118,8 +131,14 @@ namespace Enemy
                 {
                     default:
                         break;
+                    case Type.Tutorial:
+                        experimentManager.GetEnemyDestory(this);
+                        break;
+                    case Type.Experiment:
+                        experimentManager.GetEnemyDestory(this,saveUntilDestoryTime);
+                        break;
                 }
-                Instantiate(explosionEffect, transform.position, Quaternion.identity);
+                Instantiate(explosionEffect, transform.position, Quaternion.identity);               
                 Destroy(gameObject);
             }
         }

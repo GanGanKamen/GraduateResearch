@@ -4,16 +4,24 @@ using UnityEngine;
 
 namespace Interface
 {
+    public enum VibrationUnitType
+    {
+        Proto,
+        DX
+    }
+
     public class VibrationUnit
     {
         public UnitCategoly VibrationUnitCategoly;
         public bool IsVibrating { get { return isVibrating; } }
 
         private bool isVibrating = false;
+        private VibrationUnitType type = VibrationUnitType.Proto;
 
-        public VibrationUnit(UnitCategoly _unitCategoly)
+        public VibrationUnit(UnitCategoly _unitCategoly, VibrationUnitType _type)
         {
             VibrationUnitCategoly = _unitCategoly;
+            type = _type;
         }
 
         public void PlayVibrationOneShot(VibrationSystem vibrationSystem, float leftPower, float rightPower,float time)
@@ -51,7 +59,7 @@ namespace Interface
 
         public void PlayVibration(float leftPower,float rightPower)
         {
-            if (isVibrating) return;
+            if (isVibrating || type != VibrationUnitType.Proto) return;
             var direction = UnitCategolyToPlayerIndex();
             XInputDotNetPure.GamePad.SetVibration(direction, leftPower, rightPower);
             isVibrating = true;
@@ -60,8 +68,13 @@ namespace Interface
         public void StopVibration()
         {
             if (isVibrating == false) return;
-            var direction = UnitCategolyToPlayerIndex();
-            XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
+            switch (type)
+            {
+                case VibrationUnitType.Proto:
+                    var direction = UnitCategolyToPlayerIndex();
+                    XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
+                    break;
+            }
             isVibrating = false;
         }
 

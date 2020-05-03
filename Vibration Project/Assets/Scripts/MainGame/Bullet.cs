@@ -22,6 +22,7 @@ namespace Attack
             rb.useGravity = false;
             var force = _goalPos - transform.position;
             rb.AddForce(force * speed, ForceMode.Acceleration);
+            Destroy(gameObject, 3f);
         }
     }
 }

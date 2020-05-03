@@ -9,6 +9,7 @@ namespace Interface
         [SerializeField] private VibrationEffect effect;
         [SerializeField][Range(0,1)] private float vibrationPower;
         [SerializeField] private float vibrationTime;
+        [SerializeField] private VibrationUnitType unitType;
         private VibrationUnit[] vibrationUnits;
 
         private void Awake()
@@ -31,7 +32,7 @@ namespace Interface
                         direction = UnitCategoly.Right;
                         break;
                 }
-                var vibrationUnit = new VibrationUnit(direction);
+                var vibrationUnit = new VibrationUnit(direction,unitType);
                 vibrationUnitList.Add(vibrationUnit);
             }
             vibrationUnits = vibrationUnitList.ToArray();
