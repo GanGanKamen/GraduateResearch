@@ -10,9 +10,10 @@ namespace Interface
         [SerializeField][Range(0,1)] private float vibrationPower;
         [SerializeField] private float vibrationTime;
         [SerializeField] private VibrationUnitType unitType;
+        public SerialHandler serialHandler;
         private VibrationUnit[] vibrationUnits;
 
-        private void Awake()
+        void Start()
         {
             List<VibrationUnit> vibrationUnitList = new List<VibrationUnit>();
             for (int i = 0; i < 4; i++)
@@ -32,10 +33,10 @@ namespace Interface
                         direction = UnitCategoly.Right;
                         break;
                 }
-                var vibrationUnit = new VibrationUnit(direction,unitType);
+                var vibrationUnit = new VibrationUnit(this,direction,unitType);
                 vibrationUnitList.Add(vibrationUnit);
             }
-            vibrationUnits = vibrationUnitList.ToArray();
+            vibrationUnits = vibrationUnitList.ToArray();            
         }
 
         void Update()
@@ -55,6 +56,11 @@ namespace Interface
                 XInputDotNetPure.GamePad.SetVibration(0, 3f, 3f);
             }
             */
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                serialHandler.Write("a0.5;");
+                Debug.Log("Writea1Test");
+            }
         }
 
         public void TestOutput(float angle)
@@ -65,45 +71,20 @@ namespace Interface
         public void PlayVibration(float angle)
         {
             var dirNum = AngleToDirectionNumber(angle);
-            /*
-            switch (dirNum)
-            {
-                default:
-                    vibrationUnits[0].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    break;
-                case 1:
-                    vibrationUnits[0].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    vibrationUnits[1].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    break;
-                case 2:
-                    vibrationUnits[1].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    break;
-                case 3:
-                    vibrationUnits[1].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    vibrationUnits[2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    break;
-                case 4:
-                    vibrationUnits[2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    break;
-                case 5:
-                    vibrationUnits[2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    vibrationUnits[3].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                    break;
-            }
-            */
+
             if(dirNum >= 7)
             {
-                vibrationUnits[0].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                vibrationUnits[3].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                vibrationUnits[0].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                vibrationUnits[3].PlayVibrationOneShot(vibrationPower, vibrationTime);
             }
             else if(dirNum % 2 == 0)
             {
-                vibrationUnits[dirNum / 2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                vibrationUnits[dirNum / 2].PlayVibrationOneShot(vibrationPower, vibrationTime);
             }
             else
             {
-                vibrationUnits[(dirNum + 1) / 2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
-                vibrationUnits[(dirNum - 1) / 2].PlayVibrationOneShot(this, vibrationPower, vibrationPower, vibrationTime);
+                vibrationUnits[(dirNum + 1) / 2].PlayVibrationOneShot(vibrationPower,  vibrationTime);
+                vibrationUnits[(dirNum - 1) / 2].PlayVibrationOneShot(vibrationPower,  vibrationTime);
             }
         }
 

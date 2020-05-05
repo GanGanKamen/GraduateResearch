@@ -12,31 +12,54 @@ namespace Interface
 
     public class VibrationUnit
     {
+        public VibrationSystem mainSystem;
         public UnitCategoly VibrationUnitCategoly;
         public bool IsVibrating { get { return isVibrating; } }
 
         private bool isVibrating = false;
         private VibrationUnitType type = VibrationUnitType.Proto;
 
-        public VibrationUnit(UnitCategoly _unitCategoly, VibrationUnitType _type)
+        public VibrationUnit(VibrationSystem _vibrationSystem,UnitCategoly _unitCategoly, VibrationUnitType _type)
         {
+            mainSystem = _vibrationSystem;
             VibrationUnitCategoly = _unitCategoly;
             type = _type;
         }
 
-        public void PlayVibrationOneShot(VibrationSystem vibrationSystem, float leftPower, float rightPower,float time)
+        public void PlayVibrationOneShot(float power,float time)
         {
-            vibrationSystem.StartCoroutine(OneShotCoroutine(leftPower, rightPower, time));
+            mainSystem.StartCoroutine(OneShotCoroutine(power, time));
         }
         
-        private IEnumerator OneShotCoroutine(float leftPower, float rightPower, float time)
+        private IEnumerator OneShotCoroutine(float Power, float time)
         {
             if (isVibrating) yield break;
             isVibrating = true;
             var direction = UnitCategolyToPlayerIndex();
-            XInputDotNetPure.GamePad.SetVibration(direction, leftPower, rightPower);
+            string serialMessage = UnitCategolyToSerialMessage() + Power.ToString() + ";";
+            string serialStop = UnitCategolyToSerialMessage() + "0;";
+            switch (type)
+            {
+                case VibrationUnitType.Proto:
+                    XInputDotNetPure.GamePad.SetVibration(direction, Power, Power);
+                    break;
+                case VibrationUnitType.DX:
+                    mainSystem.serialHandler.Write(serialMessage);
+                    Debug.Log(serialMessage);
+                    break;
+            }
+            
             yield return new WaitForSeconds(time);
-            XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
+            switch (type)
+            {
+                case VibrationUnitType.Proto:
+                    XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
+                    break;
+                case VibrationUnitType.DX:
+                    mainSystem.serialHandler.Write(serialStop);
+                    break;
+            }
+            
             isVibrating = false;
             yield break;
         }
@@ -74,6 +97,10 @@ namespace Interface
                     var direction = UnitCategolyToPlayerIndex();
                     XInputDotNetPure.GamePad.SetVibration(direction, 0, 0);
                     break;
+                case VibrationUnitType.DX:
+                    string serialStop = UnitCategolyToSerialMessage() + "0;";
+                    mainSystem.serialHandler.Write(serialStop);
+                    break;
             }
             isVibrating = false;
         }
@@ -92,6 +119,23 @@ namespace Interface
                     return XInputDotNetPure.PlayerIndex.Four;
                 default:
                     return 0;
+            }
+        }
+
+        private string UnitCategolyToSerialMessage()
+        {
+            switch (VibrationUnitCategoly)
+            {
+                case UnitCategoly.Foward:
+                    return "a";
+                case UnitCategoly.Left:
+                    return "b";
+                case UnitCategoly.Back:
+                    return "c";
+                case UnitCategoly.Right:
+                    return "d";
+                default:
+                    return "";
             }
         }
 

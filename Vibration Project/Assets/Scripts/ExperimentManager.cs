@@ -65,7 +65,7 @@ namespace Experiment
             yield return new WaitForSeconds(1f);
             message.text = "";
 
-            phase = Phase.Normal;
+            phase = Phase.Extream;
 
             for (int i = 0;i< 10; i++)
             {

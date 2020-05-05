@@ -26,6 +26,7 @@ void loop() {
 		//Serial.println("OFF");
 		break;
 	}
+	Serial.println(receiveData);
 }
 
 void GetSerial() {

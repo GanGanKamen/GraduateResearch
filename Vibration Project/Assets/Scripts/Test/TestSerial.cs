@@ -24,13 +24,13 @@ public class TestSerial : MonoBehaviour
 
     private void LED_ON()
     {
-        serialHandler.Write("a");
+        serialHandler.Write("a1;");
         Debug.Log("WriteA");
     }
 
     private void LED_OFF()
     {
-        serialHandler.Write("s");
-        Debug.Log("WriteS");
+        serialHandler.Write("a0;");
+        Debug.Log("Write0");
     }
 }
