@@ -5,7 +5,7 @@
 */
 
 bool onOff = false;
-
+float receiveData = 0;
 // the setup function runs once when you press reset or power the board
 void setup() {
 	Serial.begin(115200);
@@ -30,6 +30,32 @@ void loop() {
 
 void GetSerial() {
 	if (Serial.available() > 0) {
+		String receiveDataMasage = Serial.readStringUntil(';');
+		Serial.println(receiveDataMasage);
+		switch (receiveDataMasage[0])
+		{
+		default:
+			break;
+		case 'a':
+			receiveDataMasage.remove(0,1);
+			receiveData = receiveDataMasage.toFloat();
+			Serial.println(receiveData);
+			digitalWrite(13, LOW);
+			break;
+		case 'b':
+			receiveDataMasage.remove(0,1);
+			receiveData = receiveDataMasage.toFloat();
+			Serial.println(receiveData);
+			digitalWrite(13, HIGH);
+			break;
+		}
+
+	}
+}
+
+/*
+void GetSerial() {
+	if (Serial.available() > 0) {
 		char cmd = Serial.read();
 		Serial.println(cmd);
 		switch (cmd)
@@ -42,4 +68,4 @@ void GetSerial() {
 			break;
 		}
 	}
-}
+}*/
