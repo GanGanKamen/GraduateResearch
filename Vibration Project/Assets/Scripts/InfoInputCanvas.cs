@@ -23,10 +23,7 @@ namespace UI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                TextSave("Ultraman");
-            }
+
         }
 
         public void GoToNext()
@@ -44,33 +41,33 @@ namespace UI
             {
                 return;
             }
-            var playerName = name_inputField.text;
+            var PlayerName = name_inputField.text;
 
-            var sex = player.BaseInfo.SexGroup.Man;
-            if (sex_group[0].isOn) sex = player.BaseInfo.SexGroup.Man;
-            else if (sex_group[1].isOn) sex = player.BaseInfo.SexGroup.Woman;
-            else sex = player.BaseInfo.SexGroup.Other;
+            var sex = Player.BaseInfo.SexGroup.Man;
+            if (sex_group[0].isOn) sex = Player.BaseInfo.SexGroup.Man;
+            else if (sex_group[1].isOn) sex = Player.BaseInfo.SexGroup.Woman;
+            else sex = Player.BaseInfo.SexGroup.Other;
 
-            var playerSkill = 0;
+            var PlayerSkill = 0;
             for(int i = 0; i < skill_group.Length; i++)
             {
                 if (skill_group[i].isOn)
                 {
-                    playerSkill = i;
+                    PlayerSkill = i;
                     break;
                 }
             }
             var ageNum = int.Parse(age_inputField.text);
-            var info = new player.BaseInfo(playerName, sex, ageNum, playerSkill);
+            var info = new Player.BaseInfo(PlayerName, sex, ageNum, PlayerSkill);
             System.GameSystem.baseInfo = info;
             UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
         }
 
         public void TextSave(string msg)
         {
-            var playerName = name_inputField.text;
+            var PlayerName = name_inputField.text;
             string txt = msg + "\n" + msg;
-            FileInfo fileInfo = new FileInfo(Application.dataPath + "/" +playerName + "Log.txt");
+            FileInfo fileInfo = new FileInfo(Application.dataPath + "/" +PlayerName + "Log.txt");
             StreamWriter writer = fileInfo.AppendText();
             writer.WriteLine(txt);
             writer.Flush();

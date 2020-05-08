@@ -7,7 +7,7 @@ namespace System
     public class GameSystem : MonoBehaviour
     {
         [SerializeField] private string nextSceneName;
-        static public player.BaseInfo baseInfo;
+        static public Player.BaseInfo baseInfo;
 
 
         // Start is called before the first frame update

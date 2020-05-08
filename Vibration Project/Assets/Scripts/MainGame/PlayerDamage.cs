@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace player
+namespace Player
 {
     public class PlayerDamage : MonoBehaviour
     {

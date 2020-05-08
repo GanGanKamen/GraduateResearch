@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace player
+namespace Player
 {
-    public class BaseInfo : MonoBehaviour
+    public class BaseInfo
     {
         public enum SexGroup
         {
