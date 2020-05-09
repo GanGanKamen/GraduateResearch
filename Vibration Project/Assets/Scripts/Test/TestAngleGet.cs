@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class PluginTest : MonoBehaviour
+public class TestAngleGet : MonoBehaviour
 {
-    [DllImport("SAMPLEDLL3")] private static extern int CountUp();
-
+    [SerializeField] float angle;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +14,6 @@ public class PluginTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        angle = transform.eulerAngles.y;
     }
 }

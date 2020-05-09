@@ -17,6 +17,7 @@ namespace Experiment
         private List<Enemy.EnemyBase> nowEnemies = new List<Enemy.EnemyBase>();
         private float destoryEnemyTimer = 0;
 
+
         private List<float> normalDatas = new List<float>();
         private List<float> vibrateDatas = new List<float>();
         private List<float> extramDatas = new List<float>();
@@ -69,7 +70,7 @@ namespace Experiment
             yield return new WaitForSeconds(1f);
             message.text = "";
 
-            phase = Phase.Normal;
+            phase = Phase.Extream;
 
             for (int i = 0;i< 10; i++)
             {
@@ -243,14 +244,15 @@ namespace Experiment
                 default:
                     break;
                 case Phase.Normal:
-                    damageCanvas.SetMarkActive(target);
+                    damageCanvas.SetMarkActive(target,true);
                     break;
                 case Phase.Vibrate:
-                    vibrationSystem.PlayVibration(CenterAngle(target));
+                    damageCanvas.SetMarkActive(target, false);
+                    vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
                     break;
                 case Phase.Extream:
-                    damageCanvas.SetMarkActive(target);
-                    vibrationSystem.PlayVibration(CenterAngle(target));
+                    damageCanvas.SetMarkActive(target,true);
+                    vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
                     break;
             }
         }

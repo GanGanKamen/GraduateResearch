@@ -30,19 +30,27 @@ namespace UI
             MarkRotate();
         }
 
-        public void SetMarkActive(Transform _target)
+        public void SetMarkActive(Transform _target, bool activeSelf)
         {
-            StartCoroutine(MarkActiveCoroutine(_target));
+            StartCoroutine(MarkActiveCoroutine(_target,activeSelf));
         }
 
-        private IEnumerator MarkActiveCoroutine(Transform _target)
+        public float GetEulerAngle(Transform _target)
+        {
+            target = _target;
+            center.localEulerAngles = new Vector3(0, 0, CenterAngle());
+            return center.localEulerAngles.z;
+        }
+
+        private IEnumerator MarkActiveCoroutine(Transform _target,bool activeSelf)
         {
             if (isDamaged) yield break;
             isDamaged = true;
             var target0 = new GameObject();
             target0.transform.position = _target.position;
             target = target0.transform;
-            mark.SetActive(true);
+            center.localEulerAngles = new Vector3(0, 0, CenterAngle());
+            if(activeSelf)mark.SetActive(true);
             yield return new WaitForSeconds(activeTime);
             mark.SetActive(false);
             //targetEnemy = null;
@@ -67,7 +75,7 @@ namespace UI
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
             float rad = Mathf.Atan2(dy, dx);
-            return rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f; //angleRange:-180 ~ 180
+            return rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f;
         }
     }
 }

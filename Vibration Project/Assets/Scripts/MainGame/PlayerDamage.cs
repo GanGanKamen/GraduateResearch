@@ -22,7 +22,7 @@ namespace Player
 
         private void HitBullet(Attack.Bullet bullet)
         {
-            if (damageCanvas != null) damageCanvas.SetMarkActive(bullet.master);
+            if (damageCanvas != null) damageCanvas.SetMarkActive(bullet.master,true);
             if (vibrationSystem != null) vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
             GetComponent<AudioSource>().PlayOneShot(hitAudio);
             Destroy(bullet.gameObject);

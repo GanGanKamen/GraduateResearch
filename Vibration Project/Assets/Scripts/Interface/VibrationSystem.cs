@@ -13,6 +13,10 @@ namespace Interface
         public SerialHandler serialHandler;
         private VibrationUnit[] vibrationUnits;
 
+        private bool[] isVibrates = new bool[4];
+        private float[] vibrateCounts = new float[4];
+        //private List<IEnumerator> nowVibrateActions = new List<IEnumerator>();
+        private IEnumerator nowVibrateAction = null;
         void Start()
         {
             List<VibrationUnit> vibrationUnitList = new List<VibrationUnit>();
@@ -35,32 +39,15 @@ namespace Interface
                 }
                 var vibrationUnit = new VibrationUnit(this,direction,unitType);
                 vibrationUnitList.Add(vibrationUnit);
+                vibrateCounts[i] = 0;
+                isVibrates[i] = false;
             }
             vibrationUnits = vibrationUnitList.ToArray();            
         }
 
         void Update()
         {
-            //テスト用
-            /*
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                XInputDotNetPure.GamePad.SetVibration(0, 0.2f, 0.2f);
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                XInputDotNetPure.GamePad.SetVibration(0, 0, 0);
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                XInputDotNetPure.GamePad.SetVibration(0, 3f, 3f);
-            }
-            */
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                serialHandler.Write("a0.5;");
-                Debug.Log("Writea1Test");
-            }
+            StopTimeVibration();
         }
 
         public void TestOutput(float angle)
@@ -71,20 +58,164 @@ namespace Interface
         public void PlayVibration(float angle)
         {
             var dirNum = AngleToDirectionNumber(angle);
+            //Debug.Log("dirNum:" + AngleToDirectionNumber(angle));
+            switch (unitType)
+            {
+                case VibrationUnitType.Proto:                   
+                    if (dirNum >= 7)
+                    {
+                        vibrationUnits[0].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                        vibrationUnits[3].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                    }
+                    else if (dirNum % 2 == 0)
+                    {
+                        vibrationUnits[dirNum / 2].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                    }
+                    else
+                    {
+                        vibrationUnits[(dirNum + 1) / 2].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                        vibrationUnits[(dirNum - 1) / 2].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                    }
+                    break;
+                case VibrationUnitType.DX:
 
-            if(dirNum >= 7)
-            {
-                vibrationUnits[0].PlayVibrationOneShot(vibrationPower, vibrationTime);
-                vibrationUnits[3].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                    //StopNowAction();
+                    /*
+                    if (dirNum >= 7)
+                    {
+                        var vibrateAction0 = OneShotCoroutine(0, 3, vibrationPower, vibrationTime);
+                        nowVibrateAction = vibrateAction0;
+                        StartCoroutine(nowVibrateAction);
+                    }
+                    else if (dirNum % 2 == 0)
+                    {
+                        var unitNum = dirNum / 2;
+                        var vibrateAction0 = OneShotCoroutine(unitNum, vibrationPower, vibrationTime);
+                        nowVibrateAction= vibrateAction0;
+                        StartCoroutine(nowVibrateAction);
+                    }
+                    else
+                    {
+                        var unitNum0 = (dirNum + 1) / 2;
+                        var unitNum1 = (dirNum - 1) / 2;
+                        var vibrateAction0 = OneShotCoroutine(unitNum0,unitNum1, vibrationPower, vibrationTime);
+                        nowVibrateAction = vibrateAction0;
+                        StartCoroutine(nowVibrateAction);
+                    }*/
+                    if (dirNum >= 7)
+                    {
+                        Shot(0, vibrationPower);
+                        Shot(3, vibrationPower);
+                    }
+                    else if (dirNum % 2 == 0)
+                    {
+                        var unitNum = dirNum / 2;
+                        Shot(unitNum, vibrationPower);
+
+                    }
+                    else
+                    {
+                        var unitNum0 = (dirNum + 1) / 2;
+                        var unitNum1 = (dirNum - 1) / 2;
+                        Shot(unitNum0, vibrationPower);
+                        Shot(unitNum1, vibrationPower);
+                    }
+                    
+                    break;
             }
-            else if(dirNum % 2 == 0)
+            
+        }
+
+        private void Shot(int num,float Power)
+        {
+            if (num > 3) return;
+            if (isVibrates[num]) return;
+            isVibrates[num] = true;
+            string serialMessage = UnitNumberToSerialMessage(num) + Power.ToString() + ";";
+            serialHandler.Write(serialMessage);
+            Debug.Log(serialMessage);
+        }
+
+        private void StopTimeVibration()
+        {
+            for(int i = 0; i < 4; i++)
             {
-                vibrationUnits[dirNum / 2].PlayVibrationOneShot(vibrationPower, vibrationTime);
+                if (isVibrates[i])
+                {
+                    if(vibrateCounts[i] >= vibrationTime)
+                    {
+                        isVibrates[i] = false;
+                        string serialStop = UnitNumberToSerialMessage(i) + "0;";
+                        serialHandler.Write(serialStop);
+                    }
+                    else
+                    {
+                        vibrateCounts[i] += Time.deltaTime;
+                    }
+                }
             }
-            else
+        }
+
+        private void StopNowAction()
+        {
+            //if (nowVibrateAction == null) return;
+            //StopCoroutine(nowVibrateAction);
+            
+            serialHandler.Write("a0;");
+            serialHandler.Write("b0;");
+            serialHandler.Write("c0;");
+            serialHandler.Write("d0;");
+            
+            for(int i = 0;i< 4; i++)
             {
-                vibrationUnits[(dirNum + 1) / 2].PlayVibrationOneShot(vibrationPower,  vibrationTime);
-                vibrationUnits[(dirNum - 1) / 2].PlayVibrationOneShot(vibrationPower,  vibrationTime);
+                vibrateCounts[i] = 0;
+                isVibrates[i] = false;
+            }
+            //nowVibrateAction = null;
+        }
+
+        private IEnumerator OneShotCoroutine(int num, float Power, float time)
+        {
+            if (num > 3) yield break;
+            string serialMessage = UnitNumberToSerialMessage(num) + Power.ToString() + ";";
+            string serialStop = UnitNumberToSerialMessage(num) + "0;";
+            serialHandler.Write(serialMessage);
+            Debug.Log(serialMessage);
+            yield return new WaitForSeconds(time);
+            serialHandler.Write(serialStop);
+            yield break;
+        }
+
+        private IEnumerator OneShotCoroutine(int num0, int num1, float Power, float time)
+        {
+            if (num0 > 3||num1 > 3) yield break;
+            string serialMessage0 = UnitNumberToSerialMessage(num0) + Power.ToString() + ";";
+            string serialStop0 = UnitNumberToSerialMessage(num0) + "0;";
+            string serialMessage1 = UnitNumberToSerialMessage(num1) + Power.ToString() + ";";
+            string serialStop1 = UnitNumberToSerialMessage(num1) + "0;";
+            serialHandler.Write(serialMessage0);
+            serialHandler.Write(serialMessage1);
+            Debug.Log(serialMessage0 + serialMessage1);
+            yield return new WaitForSeconds(time);
+            serialHandler.Write(serialStop0);
+            serialHandler.Write(serialStop1);
+            yield break;
+        }
+
+        private string UnitNumberToSerialMessage(int num)
+        {
+            switch (num)
+            {
+                case 0:
+                    return "a";
+                case 1:
+                    return "b";
+                case 2:
+                    return "c";
+                case 3:
+                    return "d";
+                default:
+                    return "";
             }
         }
 

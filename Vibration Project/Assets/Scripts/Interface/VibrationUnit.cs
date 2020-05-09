@@ -45,7 +45,8 @@ namespace Interface
                     break;
                 case VibrationUnitType.DX:
                     mainSystem.serialHandler.Write(serialMessage);
-                    Debug.Log(serialMessage);
+                    //Debug.Log(serialMessage);
+                    //Debug.Log(direction);
                     break;
             }
             
