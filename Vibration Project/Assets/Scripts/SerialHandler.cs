@@ -14,16 +14,13 @@ namespace Interface
         public int baudRate = 115200;
 
 
-        private SerialPort serialPort;
+        public SerialPort serialPort;
         private Thread thread;
         private bool isRunning = false;
         private string message;
         private bool isMessageReceived  = false;
 
-        private void Awake()
-        {
-            Open();
-        }
+        
 
         // Update is called once per frame
         void Update()
@@ -35,15 +32,16 @@ namespace Interface
             isMessageReceived = false;
         }
 
-        private void Open()
+        public void Open()
         {
             serialPort = new SerialPort(portName, baudRate);
+            var time0 = Time.deltaTime;
             serialPort.Open();
             thread = new Thread(Read);
             thread.Start();
         }
 
-        private void Close()
+        public void Close()
         {
             isMessageReceived = false;
             isRunning = false;
@@ -60,7 +58,7 @@ namespace Interface
             }
         }
 
-        private void Read()
+        public void Read()
         {
             while (isRunning && serialPort != null && serialPort.IsOpen)
             {

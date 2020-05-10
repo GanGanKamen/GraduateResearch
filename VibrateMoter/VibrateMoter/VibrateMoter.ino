@@ -24,15 +24,15 @@ void loop() {
 
 
 void GetSerial() {
-	if (Serial.available() > 0) {
-		String receiveDataMasage = Serial.readString();
+	while (Serial.available()) {
+		Serial.println("x");
+		String receiveDataMasage = Serial.readStringUntil(';');
+		Serial.println("y");
 		char sign = receiveDataMasage[0];
 		receiveDataMasage.remove(0, 1);
 		float receiveData = receiveDataMasage.toFloat();
-    //Serial.println(receiveData);
 		if (receiveData < 0 || receiveData > 1)return;
 		int ampere = (int)(receiveData * 255);
-    //Serial.println(receiveDataMasage[0]);
 		switch (sign)
 		{
 		default:

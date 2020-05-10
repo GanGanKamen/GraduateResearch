@@ -39,6 +39,7 @@ namespace Experiment
 
         private IEnumerator ExperimentCoroutine()
         {
+            /*
             for(int i = 0;i < 3; i++)
             {
                 var enemy = Instantiate(enemyPrefab, Vector3.zero, Quaternion.identity);
@@ -70,7 +71,7 @@ namespace Experiment
             yield return new WaitForSeconds(1f);
             message.text = "";
 
-            phase = Phase.Extream;
+            phase = Phase.Normal;
 
             for (int i = 0;i< 10; i++)
             {
@@ -91,6 +92,10 @@ namespace Experiment
             message.text = "Next! Vibrate";
             yield return new WaitForSeconds(1f);
             message.text = "";
+
+            */
+
+            vibrationSystem.serialHandler.Open();
             phase = Phase.Vibrate;
 
             for (int i = 0; i < 10; i++)
@@ -108,12 +113,12 @@ namespace Experiment
                 var changedAngle = Mathf.Abs(preAngle - player.eulerAngles.y);
                 vibrateAngles.Add(changedAngle);
             }
-
+            vibrationSystem.serialHandler.Close();
             message.text = "Next! Extream";
             yield return new WaitForSeconds(1f);
             message.text = "";
             phase = Phase.Extream;
-
+            vibrationSystem.serialHandler.Open();
             for (int i = 0; i < 10; i++)
             {
                 var waitTime = Random.Range(2f, 5f);
@@ -131,6 +136,7 @@ namespace Experiment
             }
 
             message.text = "Clear!";
+            vibrationSystem.serialHandler.Close();
             ResultTextOutput();
         }
 
@@ -177,25 +183,25 @@ namespace Experiment
             var normalLog = "\n" + "Normal" + "\n";
             for(int i = 0; i < normalDatas.Count; i++)
             {
-                var reactionSpeed = normalAngles[i] / normalDatas[i];
+                //var reactionSpeed = normalAngles[i] / normalDatas[i];
                 normalLog = normalLog + i + " : " + normalDatas[i] + ","
-                    + normalAngles[i] + "," + reactionSpeed + "\n";
+                    + normalAngles[i] + "," + "\n";
             }
 
             var vibrateLog = "\n" + "Vibrate" + "\n";
             for (int i = 0; i < vibrateDatas.Count; i++)
             {
-                var reactionSpeed = vibrateAngles[i] / vibrateDatas[i];
+                //var reactionSpeed = vibrateAngles[i] / vibrateDatas[i];
                 vibrateLog = vibrateLog + i + " : " + vibrateDatas[i] + ","
-                    + vibrateAngles[i] + "," + reactionSpeed + "\n";
+                    + vibrateAngles[i] + "," + "\n";
             }
 
             var extreamLog = "\n" + "Extream" + "\n";
             for (int i = 0; i < extramDatas.Count; i++)
             {
-                var reactionSpeed = extramAngles[i] / extramDatas[i];
+                //var reactionSpeed = extramAngles[i] / extramDatas[i];
                 extreamLog = extreamLog + i + " : " + extramDatas[i] + ","
-                    + extramAngles[i] + "," + reactionSpeed + "\n";
+                    + extramAngles[i] + ","  + "\n";
             }
 
             var logs = normalLog + vibrateLog + extreamLog;
@@ -234,7 +240,12 @@ namespace Experiment
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
             float rad = Mathf.Atan2(dy, dx);
-            return rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f; //angleRange:-180 ~ 180
+            float inputAngle = rad * Mathf.Rad2Deg + player.eulerAngles.y - 90f; //angleRange:-180 ~ 180
+            var obj = new GameObject();
+            obj.transform.localEulerAngles = new Vector3(0, 0, inputAngle);
+            var outputAngle = obj.transform.localEulerAngles.z;
+            Destroy(obj);
+            return outputAngle;
         }
 
         public void GetDamageFromEnemy(Transform target)
@@ -247,12 +258,11 @@ namespace Experiment
                     damageCanvas.SetMarkActive(target,true);
                     break;
                 case Phase.Vibrate:
-                    damageCanvas.SetMarkActive(target, false);
-                    vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
+                    vibrationSystem.PlayVibration(CenterAngle(target));
                     break;
                 case Phase.Extream:
                     damageCanvas.SetMarkActive(target,true);
-                    vibrationSystem.PlayVibration(damageCanvas.MarkAngle);
+                    vibrationSystem.PlayVibration(CenterAngle(target));
                     break;
             }
         }

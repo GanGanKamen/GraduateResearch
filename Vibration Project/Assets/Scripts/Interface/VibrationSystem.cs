@@ -13,8 +13,8 @@ namespace Interface
         public SerialHandler serialHandler;
         private VibrationUnit[] vibrationUnits;
 
-        private bool[] isVibrates = new bool[4];
-        private float[] vibrateCounts = new float[4];
+        [SerializeField]private bool[] isVibrates = new bool[4];
+        [SerializeField]private float[] vibrateCounts = new float[4];
         //private List<IEnumerator> nowVibrateActions = new List<IEnumerator>();
         private IEnumerator nowVibrateAction = null;
         void Start()
@@ -130,10 +130,9 @@ namespace Interface
         {
             if (num > 3) return;
             if (isVibrates[num]) return;
-            isVibrates[num] = true;
-            string serialMessage = UnitNumberToSerialMessage(num) + Power.ToString() + ";";
+            string serialMessage = UnitNumberToSerialMessage(num);
             serialHandler.Write(serialMessage);
-            Debug.Log(serialMessage);
+            isVibrates[num] = true;
         }
 
         private void StopTimeVibration()
@@ -144,9 +143,11 @@ namespace Interface
                 {
                     if(vibrateCounts[i] >= vibrationTime)
                     {
-                        isVibrates[i] = false;
-                        string serialStop = UnitNumberToSerialMessage(i) + "0;";
+                        vibrateCounts[i] = 0;
+                        string serialStop = UnitNumberToSerialMessage(i);
                         serialHandler.Write(serialStop);
+                        isVibrates[i] = false;
+
                     }
                     else
                     {
@@ -207,13 +208,17 @@ namespace Interface
             switch (num)
             {
                 case 0:
-                    return "a";
+                    if (isVibrates[0]) return "h";
+                    else return "a";
                 case 1:
-                    return "b";
+                    if (isVibrates[1]) return "i";
+                    else return "b";
                 case 2:
-                    return "c";
+                    if (isVibrates[2]) return "j";
+                    else return "c";
                 case 3:
-                    return "d";
+                    if (isVibrates[3]) return "k";
+                    else return "d";
                 default:
                     return "";
             }

@@ -9,7 +9,7 @@ float receiveData = 0;
 // the setup function runs once when you press reset or power the board
 void setup() {
 	Serial.begin(115200);
-	pinMode(13, OUTPUT);
+	pinMode(12, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -18,11 +18,11 @@ void loop() {
 	switch (onOff)
 	{
 	case true:
-		digitalWrite(13, HIGH);
+		digitalWrite(12, HIGH);
 		//Serial.println("ON");
 		break;
 	case false:
-		digitalWrite(13, LOW);
+		digitalWrite(12, LOW);
 		//Serial.println("OFF");
 		break;
 	}
@@ -41,13 +41,13 @@ void GetSerial() {
 			receiveDataMasage.remove(0,1);
 			receiveData = receiveDataMasage.toFloat();
 			Serial.println(receiveData);
-			digitalWrite(13, LOW);
+			digitalWrite(12, LOW);
 			break;
 		case 'b':
 			receiveDataMasage.remove(0,1);
 			receiveData = receiveDataMasage.toFloat();
 			Serial.println(receiveData);
-			digitalWrite(13, HIGH);
+			digitalWrite(12, HIGH);
 			break;
 		}
 
