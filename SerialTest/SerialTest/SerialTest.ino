@@ -19,16 +19,15 @@ void loop() {
 	{
 	case true:
 		digitalWrite(12, HIGH);
-		//Serial.println("ON");
+		Serial.println("on");
 		break;
 	case false:
 		digitalWrite(12, LOW);
-		//Serial.println("OFF");
 		break;
 	}
-	Serial.println(receiveData);
 }
 
+/*
 void GetSerial() {
 	if (Serial.available() > 0) {
 		String receiveDataMasage = Serial.readStringUntil(';');
@@ -53,8 +52,8 @@ void GetSerial() {
 
 	}
 }
+*/
 
-/*
 void GetSerial() {
 	if (Serial.available() > 0) {
 		char cmd = Serial.read();
@@ -69,4 +68,4 @@ void GetSerial() {
 			break;
 		}
 	}
-}*/
+}
