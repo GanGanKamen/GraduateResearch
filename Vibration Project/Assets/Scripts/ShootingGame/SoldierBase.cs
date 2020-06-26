@@ -74,7 +74,7 @@ namespace Shooting
             transform.localEulerAngles = rot;
         }
 
-        public void Aiming(bool _isAim)
+        public void SetAiming(bool _isAim)
         {
             switch (_isAim)
             {
@@ -96,7 +96,6 @@ namespace Shooting
             if (isAim == false) return;
             var moveVec = forwardVec * inputVec.y + rightVec * inputVec.x;
             transform.position += moveVec * Time.deltaTime * runSpeed * 0.6f;
-            Debug.Log(moveVec);
             soldierAnimator.SetFloat("Move_X", inputVec.x);
             soldierAnimator.SetFloat("Move_Y", inputVec.y);
         }
@@ -104,7 +103,7 @@ namespace Shooting
         public void AimRotate(float horizontal, float vertical)
         {
             if (isAim == false) return;
-            transform.localEulerAngles += new Vector3(0,horizontal,0);
+            transform.localEulerAngles += new Vector3(0,horizontal * Time.deltaTime * 360f,0);
             var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
             transform.localRotation = Quaternion.LookRotation(direction);
             body.transform.localEulerAngles = Vector3.zero;

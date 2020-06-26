@@ -60,7 +60,7 @@ namespace Shooting
                 {
                     var vec = cameraManager.FreeCameraVec(transform.position);
                     SetTransformRotation(vec);
-                    Aiming(true);
+                    SetAiming(true);
                     cameraManager.TrunAimCamera();
                 }
             }
@@ -69,7 +69,7 @@ namespace Shooting
                 if (IsAim)
                 {
                     //var vec = cameraManager.FreeCameraVec(transform.position);
-                    Aiming(false);
+                    SetAiming(false);
                     cameraManager.CancelAimCamera();
                     cameraManager.FreeCameraReset();
                 }

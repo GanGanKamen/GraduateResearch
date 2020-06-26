@@ -44,7 +44,9 @@ namespace Shooting
         public void AimCameraMove(float vertical)
         {            
             var transposer = aimCamera.GetCinemachineComponent<CinemachineTransposer>();
-            transposer.m_FollowOffset -= new Vector3(0, vertical * 0.1f, vertical * 0.01f);
+            transposer.m_FollowOffset -= new Vector3(0, vertical * 0.1f, 0);
+            var composer = aimCamera.GetCinemachineComponent<CinemachineComposer>();
+            composer.m_ScreenY += vertical * 0.01f;
         }
 
         public Vector3 FreeCameraVec(Vector3 pos)
