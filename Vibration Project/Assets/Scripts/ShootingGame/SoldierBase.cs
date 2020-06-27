@@ -78,7 +78,7 @@ namespace Shooting
             transform.localEulerAngles = rot;
         }
 
-        public void SetAiming(Vector3 vec)
+        public void SetAiming()
         {
             isAim = true;
             //SetAimRotation();
@@ -122,16 +122,16 @@ namespace Shooting
                 
         }
 
-        public void AimCameraRotate(float horizontal, Vector3 vec)
+        public void AimCameraRotate(float horizontal, Vector3 startPos,Vector3 endPos)
         {
             if (isAim == false) return;
             transform.localEulerAngles += new Vector3(0, horizontal * Time.deltaTime * 360f, 0);
-            var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
-            transform.localRotation = Quaternion.LookRotation(direction);
-            body.transform.localEulerAngles = Vector3.zero;
+            //var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
+            //transform.localRotation = Quaternion.LookRotation(direction);
+            //body.transform.localEulerAngles = Vector3.zero;
 
 
-            iK.SetTargetVec(vec);
+            iK.SetTargetVec(startPos,endPos);
         }
     }
 }

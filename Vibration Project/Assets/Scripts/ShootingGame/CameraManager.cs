@@ -55,7 +55,7 @@ namespace Shooting
     
         public void AimCameraMove(float vertical)
         {
-            
+            /*
             var composer = aimCamera.GetCinemachineComponent<CinemachineComposer>();
             composer.m_ScreenY += vertical * 0.01f;
             if (composer.m_ScreenY < aimLimit.x)
@@ -70,8 +70,14 @@ namespace Shooting
             }
             var transposer = aimCamera.GetCinemachineComponent<CinemachineTransposer>();
             transposer.m_FollowOffset -= new Vector3(0, vertical * 0.1f, 0);
-            
-            //aimCamera.m_LookAt.position += new Vector3(0, vertical * Time.deltaTime * 10,0);
+            */
+            aimCamera.m_LookAt.position += new Vector3(0, vertical * Time.deltaTime * 10,0);
+        }
+
+        public void AimCameraRotate(float vertical)
+        {
+            aimCamera.transform.RotateAround(aimCamera.m_LookAt.position,
+                Vector3.right, vertical * Time.deltaTime);
         }
 
         public Vector3 FreeCameraVec(Vector3 pos)

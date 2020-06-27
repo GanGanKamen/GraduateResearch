@@ -24,7 +24,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             else
             {
                 Debug.LogWarning(
-                    "Warning: no main camera found. Third person character needs a Camera tagged \"MainCamera\", for camera-relative controls.", gameObject);
+                    "Warning: no main camera found. Third person character needs a Camera tagged \"MainCamera\", for camera-relative controls.");
                 // we use self-relative controls in this case, which probably isn't what the user wants, but hey, we warned them!
             }
 
@@ -50,6 +50,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             float v = CrossPlatformInputManager.GetAxis("Vertical");
             bool crouch = Input.GetKey(KeyCode.C);
 
+            
             // calculate move direction to pass to character
             if (m_Cam != null)
             {
@@ -67,6 +68,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 	        if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
 #endif
 
+            //Debug.DrawRay(transform.position, m_Move, Color.blue, 3.0f);
             // pass all parameters to the character control script
             m_Character.Move(m_Move, crouch, m_Jump);
             m_Jump = false;

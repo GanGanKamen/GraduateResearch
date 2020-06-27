@@ -48,7 +48,7 @@ namespace Shooting
                     break;
                 case true:
                     var aimVec = cameraManager.AimCameraVec * 100;
-                    AimCameraRotate(Input.GetAxis("Mouse X"), aimVec);
+                    AimCameraRotate(Input.GetAxis("Mouse X"), cameraManager.CharacterCamera.transform.position,cameraManager.AimPosition);
                     cameraManager.AimCameraMove(Input.GetAxis("Mouse Y"));
                     if (inputVec.magnitude != 0)
                     {
@@ -61,14 +61,14 @@ namespace Shooting
 
             
 
-            if (Input.GetMouseButton(1))
+            if (Input.GetAxis("Trigger") == -1)
             {
                 if (IsAim == false)
                 {
                     var vec = cameraManager.FreeCameraVec(transform.position);
                     SetTransformRotation(vec);
                     var aimVec = (cameraManager.AimPosition - Weapon.transform.position)*100f;
-                    SetAiming(aimVec);
+                    SetAiming();
                     cameraManager.TrunAimCamera();
                 }
             }
