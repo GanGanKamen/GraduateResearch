@@ -7,15 +7,18 @@ namespace Shooting
     public class SoldierBase : MonoBehaviour
     {
         public GameObject Body { get { return body; } }
-        public Vector3 forwardVec { get { return (front.position - transform.position).normalized; } }
-        public Vector3 rightVec { get { return (right.position - transform.position).normalized; } }
         public bool IsAim { get { return isAim; } }
         [SerializeField] private float runSpeed;
         [SerializeField] private GameObject body;
+        [SerializeField] private GameObject weapon;
+        [SerializeField] private Transform muzzle;
         [SerializeField] private Animator soldierAnimator;
-        [SerializeField] private Transform front;
-        [SerializeField] private Transform right;
-        [SerializeField]private bool isAim = false;
+        [SerializeField] private bool isAim = false;
+        [SerializeField] private IKManager iK;
+        [SerializeField] private Vector2 aimAngleLimit;
+        [SerializeField] private float aimAngle = 0;
+
+        private float defaultWeaponAngle;
         // Start is called before the first frame update
         void Start()
         {
@@ -25,7 +28,7 @@ namespace Shooting
         // Update is called once per frame
         void Update()
         {
-            
+
         }
 
         public void CharacterMove(Vector3 _direction)
@@ -81,11 +84,17 @@ namespace Shooting
                 case true:
                     isAim = true;
                     //SetAimRotation();
+                    aimAngle = 0;
+                    iK.SetIK();
                     soldierAnimator.SetBool("IsAim", true);
+                    //weapon.transform.rotation = Quaternion.LookRotation(muzzle.position);
+                    defaultWeaponAngle = weapon.transform.localEulerAngles.y;
                     break;
                 case false:
                     isAim = false;
                     ResetRotation();
+                    aimAngle = 0;
+                    iK.ResetIK();
                     soldierAnimator.SetBool("IsAim", false);
                     break;
             }
@@ -94,7 +103,7 @@ namespace Shooting
         public void AimMove(Vector2 inputVec)
         {
             if (isAim == false) return;
-            var moveVec = forwardVec * inputVec.y + rightVec * inputVec.x;
+            var moveVec = transform.forward * inputVec.y + transform.right * inputVec.x;
             transform.position += moveVec * Time.deltaTime * runSpeed * 0.6f;
             soldierAnimator.SetFloat("Move_X", inputVec.x);
             soldierAnimator.SetFloat("Move_Y", inputVec.y);
@@ -107,6 +116,16 @@ namespace Shooting
             var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
             transform.localRotation = Quaternion.LookRotation(direction);
             body.transform.localEulerAngles = Vector3.zero;
+
+            
+            aimAngle += vertical * Time.deltaTime * 360f;
+
+            if (aimAngle > aimAngleLimit.y) aimAngle = aimAngleLimit.y;
+            else if (aimAngle < aimAngleLimit.x) aimAngle = aimAngleLimit.x;
+
+            weapon.transform.localEulerAngles = new Vector3
+                (weapon.transform.localEulerAngles.x, defaultWeaponAngle+ aimAngle, weapon.transform.localEulerAngles.z);
+                
         }
     }
 }

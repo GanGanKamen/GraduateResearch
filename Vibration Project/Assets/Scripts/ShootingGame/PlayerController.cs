@@ -41,6 +41,7 @@ namespace Shooting
                     else CharacterStand();
                     break;
                 case true:
+                    //var hight = (transform.position - cameraManager.CharacterCamera.transform.position).y + 2.5f;
                     AimRotate(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                     cameraManager.AimCameraMove(Input.GetAxis("Mouse Y"));
                     if (inputVec.magnitude != 0)
@@ -68,10 +69,10 @@ namespace Shooting
             {
                 if (IsAim)
                 {
-                    //var vec = cameraManager.FreeCameraVec(transform.position);
                     SetAiming(false);
                     cameraManager.CancelAimCamera();
                     cameraManager.FreeCameraReset();
+                    cameraManager.AimCameraReset();
                 }
             }
         }

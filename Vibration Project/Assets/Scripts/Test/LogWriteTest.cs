@@ -5,6 +5,7 @@ using System.IO;
 
 public class LogWriteTest : MonoBehaviour
 {
+    private float h = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +15,8 @@ public class LogWriteTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        h += Time.deltaTime;
+        transform.position = new Vector3(0,h,0);
     }
 
     public void TextSave(string msg)

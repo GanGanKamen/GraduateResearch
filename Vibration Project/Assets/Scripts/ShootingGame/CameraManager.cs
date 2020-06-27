@@ -12,7 +12,7 @@ namespace Shooting
         [SerializeField] private CinemachineBrain characterCamera;
         [SerializeField] private CinemachineFreeLook freeLookCamera;
         [SerializeField] private CinemachineVirtualCamera aimCamera;
-
+        [SerializeField] private Vector2 aimLimit;
         // Start is called before the first frame update
         void Start()
         {
@@ -41,12 +41,31 @@ namespace Shooting
             freeLookCamera.m_YAxis.Value = 0.5f;
         }
 
-        public void AimCameraMove(float vertical)
-        {            
+        public void AimCameraReset()
+        {
             var transposer = aimCamera.GetCinemachineComponent<CinemachineTransposer>();
-            transposer.m_FollowOffset -= new Vector3(0, vertical * 0.1f, 0);
+            transposer.m_FollowOffset = new Vector3(0.6f,2.5f , -1f);
+            var composer = aimCamera.GetCinemachineComponent<CinemachineComposer>();
+            composer.m_ScreenY = 0.5f;
+        }
+    
+        public void AimCameraMove(float vertical)
+        {
             var composer = aimCamera.GetCinemachineComponent<CinemachineComposer>();
             composer.m_ScreenY += vertical * 0.01f;
+            if (composer.m_ScreenY < aimLimit.x)
+            {
+                composer.m_ScreenY = aimLimit.x;
+                return;
+            } 
+            else if (composer.m_ScreenY > aimLimit.y)
+            {
+                composer.m_ScreenY = aimLimit.y;
+                return;
+            }
+            var transposer = aimCamera.GetCinemachineComponent<CinemachineTransposer>();
+            transposer.m_FollowOffset -= new Vector3(0, vertical * 0.1f, 0);
+
         }
 
         public Vector3 FreeCameraVec(Vector3 pos)
