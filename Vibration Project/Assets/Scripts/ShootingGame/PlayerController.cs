@@ -7,6 +7,7 @@ namespace Shooting
     public class PlayerController : SoldierBase
     {
         [SerializeField] private CameraManager cameraManager;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -17,6 +18,11 @@ namespace Shooting
         void Update()
         {
             KeyCtrl();
+        }
+
+        private void FixedUpdate()
+        {
+            
         }
 
         private void KeyCtrl()
@@ -41,8 +47,8 @@ namespace Shooting
                     else CharacterStand();
                     break;
                 case true:
-                    //var hight = (transform.position - cameraManager.CharacterCamera.transform.position).y + 2.5f;
-                    AimRotate(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                    var aimVec = cameraManager.AimCameraVec * 100;
+                    AimCameraRotate(Input.GetAxis("Mouse X"), aimVec);
                     cameraManager.AimCameraMove(Input.GetAxis("Mouse Y"));
                     if (inputVec.magnitude != 0)
                     {
@@ -61,7 +67,8 @@ namespace Shooting
                 {
                     var vec = cameraManager.FreeCameraVec(transform.position);
                     SetTransformRotation(vec);
-                    SetAiming(true);
+                    var aimVec = (cameraManager.AimPosition - Weapon.transform.position)*100f;
+                    SetAiming(aimVec);
                     cameraManager.TrunAimCamera();
                 }
             }
@@ -69,7 +76,7 @@ namespace Shooting
             {
                 if (IsAim)
                 {
-                    SetAiming(false);
+                    CancelAiming();
                     cameraManager.CancelAimCamera();
                     cameraManager.FreeCameraReset();
                     cameraManager.AimCameraReset();

@@ -7,6 +7,7 @@ namespace Shooting
     public class SoldierBase : MonoBehaviour
     {
         public GameObject Body { get { return body; } }
+        public GameObject Weapon { get { return weapon; } }
         public bool IsAim { get { return isAim; } }
         [SerializeField] private float runSpeed;
         [SerializeField] private GameObject body;
@@ -77,27 +78,23 @@ namespace Shooting
             transform.localEulerAngles = rot;
         }
 
-        public void SetAiming(bool _isAim)
+        public void SetAiming(Vector3 vec)
         {
-            switch (_isAim)
-            {
-                case true:
-                    isAim = true;
-                    //SetAimRotation();
-                    aimAngle = 0;
-                    iK.SetIK();
-                    soldierAnimator.SetBool("IsAim", true);
-                    //weapon.transform.rotation = Quaternion.LookRotation(muzzle.position);
-                    defaultWeaponAngle = weapon.transform.localEulerAngles.y;
-                    break;
-                case false:
-                    isAim = false;
-                    ResetRotation();
-                    aimAngle = 0;
-                    iK.ResetIK();
-                    soldierAnimator.SetBool("IsAim", false);
-                    break;
-            }
+            isAim = true;
+            //SetAimRotation();
+            aimAngle = 0;
+            iK.SetIK();
+            soldierAnimator.SetBool("IsAim", true);
+            defaultWeaponAngle = weapon.transform.localEulerAngles.y;
+        }
+
+        public void CancelAiming()
+        {
+            isAim = false;
+            ResetRotation();
+            aimAngle = 0;
+            iK.ResetIK();
+            soldierAnimator.SetBool("IsAim", false);
         }
 
         public void AimMove(Vector2 inputVec)
@@ -122,10 +119,19 @@ namespace Shooting
 
             if (aimAngle > aimAngleLimit.y) aimAngle = aimAngleLimit.y;
             else if (aimAngle < aimAngleLimit.x) aimAngle = aimAngleLimit.x;
-
-            weapon.transform.localEulerAngles = new Vector3
-                (weapon.transform.localEulerAngles.x, defaultWeaponAngle+ aimAngle, weapon.transform.localEulerAngles.z);
                 
+        }
+
+        public void AimCameraRotate(float horizontal, Vector3 vec)
+        {
+            if (isAim == false) return;
+            transform.localEulerAngles += new Vector3(0, horizontal * Time.deltaTime * 360f, 0);
+            var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
+            transform.localRotation = Quaternion.LookRotation(direction);
+            body.transform.localEulerAngles = Vector3.zero;
+
+
+            iK.SetTargetVec(vec);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace Shooting
         [SerializeField] private Transform rightHand;
         [SerializeField] private float ikWeight = 0;
         [SerializeField] private Animator soldierAnimator;
-
+        private Vector3 targetVec;
         private bool isIK;
         void Start()
         {
@@ -21,11 +21,12 @@ namespace Shooting
         // Update is called once per frame
         void Update()
         {
-            
+
         }
         public void SetIK()
         {
             isIK = true;
+
         }
 
         public void ResetIK()
@@ -33,11 +34,19 @@ namespace Shooting
             isIK = false;
         }
 
+        public void SetTargetVec(Vector3 vec)
+        {
+            targetVec = vec;
+        }
+
         private void OnAnimatorIK(int layerIndex)
         {
 
             if (isIK) ikWeight = 1.0f;
             else ikWeight = 0;
+            soldierAnimator.SetLookAtWeight(ikWeight, ikWeight, ikWeight, ikWeight, ikWeight);
+            soldierAnimator.SetLookAtPosition(targetVec);
+            /*
             soldierAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, ikWeight);
             soldierAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, ikWeight);
 
@@ -46,6 +55,7 @@ namespace Shooting
 
             //soldierAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, ikWeight);
             soldierAnimator.SetIKRotation(AvatarIKGoal.RightHand, rightHand.rotation);
+            */
         }
     }
 }
