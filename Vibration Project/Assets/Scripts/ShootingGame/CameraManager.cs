@@ -17,6 +17,7 @@ namespace Shooting
         [SerializeField] private Vector2 aimLimit;
 
         private Vector3 defaultAimOffest;
+        [SerializeField]private float aimAxisY = 0;
         // Start is called before the first frame update
         void Start()
         {
@@ -56,6 +57,20 @@ namespace Shooting
         public void AimCameraMove(float vertical)
         {
             /*
+            aimAxisY -= vertical * Time.deltaTime;
+            if(aimAxisY < 0)
+            {
+                var composer = aimCamera.GetCinemachineComponent<CinemachineComposer>();
+                composer.m_ScreenY += vertical * 0.01f;
+            }
+
+            else if(aimAxisY > 0)
+            {
+                aimCamera.m_LookAt.position += new Vector3(0, vertical * Time.deltaTime * 10, 0);
+            }
+            */
+
+            /*
             var composer = aimCamera.GetCinemachineComponent<CinemachineComposer>();
             composer.m_ScreenY += vertical * 0.01f;
             if (composer.m_ScreenY < aimLimit.x)
@@ -71,7 +86,16 @@ namespace Shooting
             var transposer = aimCamera.GetCinemachineComponent<CinemachineTransposer>();
             transposer.m_FollowOffset -= new Vector3(0, vertical * 0.1f, 0);
             */
-            aimCamera.m_LookAt.position += new Vector3(0, vertical * Time.deltaTime * 10,0);
+            //aimCamera.m_LookAt.position += new Vector3(0, vertical * Time.deltaTime * 10, 0);
+            var transposer = aimCamera.GetCinemachineComponent<CinemachineTransposer>();
+            var r = Vector3.Distance(aimCamera.transform.position, AimPosition);
+            Debug.Log("R = " + r);
+            var y = Mathf.Sin(Time.deltaTime * Mathf.PI * 2) * vertical * r;
+            var z = Mathf.Cos(Time.deltaTime * Mathf.PI * 2) * vertical * r;
+            Debug.Log("y = " + y);
+            Debug.Log("z = " + z);
+            transposer.m_FollowOffset -= new Vector3(0, y, z);
+            
         }
 
         public void AimCameraRotate(float vertical)

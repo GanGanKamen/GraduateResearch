@@ -16,6 +16,9 @@ namespace Shooting
         private Vector3 startPos;
         private Vector3 endPos;
         private bool isIK;
+
+        [SerializeField] private GameObject debugObj0;
+        [SerializeField] private GameObject debugObj1;
         void Start()
         {
 
@@ -24,7 +27,8 @@ namespace Shooting
         // Update is called once per frame
         void Update()
         {
-
+            if(debugObj0 != null) debugObj0.transform.position = startPos;
+            if(debugObj1 != null) debugObj1.transform.position = endPos;
         }
         public void SetIK()
         {
