@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5694556505728533460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5694556505728533466}
+  - component: {fileID: 5694556505728533461}
+  m_Layer: 0
+  m_Name: ComplexVFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5694556505728533466
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694556505728533460}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 22.301432, y: 13.758753, z: 16.746124}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5694556505728533461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5694556505728533460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b586cf6ae36b164409ae4e4c3cbaf972, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  VFXGraphs:
+  - {fileID: 8439946598487280462, guid: b98205d0a82c7bf4bb120c41567327a5, type: 3}
+  - {fileID: 4113643101297415950, guid: 6c9c20b94b164104cbab82cce23f16d0, type: 3}
+  - {fileID: 6339816034923580806, guid: c49be9c9025ffbb42b942ab468f31022, type: 3}
+  - {fileID: 8395333454033626482, guid: c0e9b134aa4c84f4493f61339bb06f2f, type: 3}
+  - {fileID: 3469506665149205054, guid: 48ddc31d2fc488247871c3e5e372ea85, type: 3}
+  - {fileID: 7320181219508401442, guid: e79a07a9a7a972545a00c7c6ee488318, type: 3}
+  - {fileID: 5354949460123343461, guid: 81990e9d98f1334498024b967cec8c9d, type: 3}
+  - {fileID: 8363524351218468975, guid: 534c8daca79b1b34ea5097148a1788db, type: 3}
+  - {fileID: 6978727764277773704, guid: d33e8532248e26f4b9789294bd3f9f28, type: 3}
+  - {fileID: 7160408598107610942, guid: 038dd1f4a9cab834fbfae34e67ac22ae, type: 3}
+  VFXGraphsSizeMultipler: 3
+  VFXGraphsAutodestroyTime: 4
+  Alembics:
+  - {fileID: 67395469963484027, guid: 8d6007c020f914b458130d8c560a6f8f, type: 3}
+  - {fileID: 2227512933560233425, guid: d666a9c6497a591419655d1e99ce7151, type: 3}
+  - {fileID: 5434001340249772668, guid: 7906697e6f657ce4aa181d51790dba4a, type: 3}
+  - {fileID: 6897147182098898691, guid: 53d93c152c723f045b54b6943c95f2f4, type: 3}
+  - {fileID: 7038612563209759207, guid: b9e9c76970bef2e419185f2f85e227cf, type: 3}
+  - {fileID: 7583675898355685990, guid: aad558a5ead41b5489feaa6c04f9811b, type: 3}
+  - {fileID: 7819418446369100000, guid: b2667b1d090bc884dbbd00c2f9339389, type: 3}
+  - {fileID: 3210849778266667611, guid: f4b6441d5f041154ea093a380ebc2b80, type: 3}
+  AlembicsSizeMultipler: 3
+  AlembicsAutodestroyTime: 4
+  SFXClip: []
+  ParticleDecal:
+  - {fileID: 1309012976915568501, guid: e239fc866dc667942aa44a91c3c35877, type: 3}
+  - {fileID: 5488263654085912691, guid: 5d0f1087c28e0ac4d91001d1a0a566ff, type: 3}
+  ParticleDecalAutodestroyTime: 15

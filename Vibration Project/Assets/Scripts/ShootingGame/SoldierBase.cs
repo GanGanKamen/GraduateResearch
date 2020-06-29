@@ -135,7 +135,8 @@ namespace Shooting
 
         public void Shoot()
         {
-            isShoot = true;
+            if (isAim == false) isAim = true;
+                isShoot = true;
             if (shootCoolDownCount >= shootCoolDownTime)
             {
                 shootCoolDownCount = 0;

@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1101066494276073288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1101066494276073332}
+  - component: {fileID: 1101066494276073333}
+  - component: {fileID: 1101066494276073290}
+  - component: {fileID: 1101066494276073291}
+  m_Layer: 0
+  m_Name: BloodSplashVFX(M) (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1101066494276073332
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101066494276073288}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.011015926, y: -0.026667008, z: -0.09615156}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1101066494276073333
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101066494276073288}
+  m_Mesh: {fileID: 0}
+--- !u!23 &1101066494276073290
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101066494276073288}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 65f97280f61f2e243a6b92b4472980f2, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &1101066494276073291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101066494276073288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb2654da15b6c0408026629024398a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AllMeshes:
+  - {fileID: -5483651897272174545, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -5305768848599555086, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -4311030324946134740, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 7461740652375764371, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 8157835740524130970, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 4628568993238382386, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 8174578350213851264, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -954398866046439350, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -1839476359166248221, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -1951738551884040424, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -4939223275508039624, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -6708890525273714546, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -7308063896002357818, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -687771669484730596, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 2018959131352930593, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 8143835794305000073, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 4648587443477666065, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 268693920259720921, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -2207674569615116029, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -4574047672173334284, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -3161624027180444512, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 4839290904934422252, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 1595508050788080112, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 5518763384819879793, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -5967627205284306079, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 1484796719640653594, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -1570982319899606751, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -5133955865896854890, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -555065177435261552, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -420209107339033492, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 782337769558107221, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -3826689062161783950, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 6767892360571992976, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 8756978500084575876, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 7495824286100751980, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 2665742916174399552, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 1074861377363476071, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -7698346207704159769, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: -4940445456204443540, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  - {fileID: 4691059077514548546, guid: 194c098cb87721249b3069cb2073800f, type: 3}
+  FrameDelayTime: 0.05
+  IsPlayOnAwake: 1
+  DestroyOnFinish: 1

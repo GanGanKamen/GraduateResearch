@@ -68,7 +68,7 @@ namespace Shooting
                     cameraManager.TrunAimCamera();
                 }
             }
-            else
+            else if(Input.GetAxis("Trigger L") < 0.5f && Input.GetAxis("Trigger R") <= 0.5f)
             {
                 if (IsAim)
                 {
@@ -81,9 +81,16 @@ namespace Shooting
 
             if(Input.GetAxis("Trigger R") > 0.5f)
             {
+                if (IsAim == false)
+                {
+                    var vec = cameraManager.FreeCameraVec(transform.position);
+                    SetTransformRotation(vec);
+                    SetAiming();
+                    cameraManager.TrunAimCamera();
+                }
                 Shoot();
             }
-            else if(Input.GetAxis("Trigger R") <= 0.5f && IsAim)
+            else if(Input.GetAxis("Trigger R") <= 0.5f)
             {
                 ShootOver();
             }
