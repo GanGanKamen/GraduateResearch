@@ -7,7 +7,7 @@ namespace Shooting
     public class PlayerController : SoldierBase
     {
         [SerializeField] private CameraManager cameraManager;
-
+        [SerializeField] private bool aimDebug;
         // Start is called before the first frame update
         void Start()
         {
@@ -31,7 +31,6 @@ namespace Shooting
             var az = Input.GetAxis("Vertical");
             var inputVec = new Vector3(ax, 0, az);
             //Debug.Log(new Vector2(Input.GetAxis("Mouse X"),Input.GetAxis("Mouse Y")));           
-
             switch (IsAim)
             {
                 case false:
@@ -47,9 +46,8 @@ namespace Shooting
                     else CharacterStand();
                     break;
                 case true:
-                    var aimVec = cameraManager.AimCameraVec * 100;
-                    AimCameraRotate(Input.GetAxis("Mouse X"), cameraManager.CharacterCamera.transform.position,cameraManager.AimPosition);
-                    cameraManager.AimCameraMove(Input.GetAxis("Mouse Y"));
+                    PlayerAimRotate(Input.GetAxis("Mouse X"));
+                    cameraManager.AimCameraRotate(Input.GetAxis("Mouse Y"));
                     if (inputVec.magnitude != 0)
                     {
                         var inputVec2 = new Vector2(inputVec.x, inputVec.z);
@@ -60,14 +58,12 @@ namespace Shooting
             }
 
             
-
-            if (Input.GetAxis("Trigger") == -1)
+            if (Input.GetAxis("Trigger L") > 0.5f || aimDebug)
             {
                 if (IsAim == false)
                 {
                     var vec = cameraManager.FreeCameraVec(transform.position);
                     SetTransformRotation(vec);
-                    var aimVec = (cameraManager.AimPosition - Weapon.transform.position)*100f;
                     SetAiming();
                     cameraManager.TrunAimCamera();
                 }
@@ -81,6 +77,15 @@ namespace Shooting
                     cameraManager.FreeCameraReset();
                     cameraManager.AimCameraReset();
                 }
+            }
+
+            if(Input.GetAxis("Trigger R") > 0.5f)
+            {
+                Shoot();
+            }
+            else if(Input.GetAxis("Trigger R") <= 0.5f && IsAim)
+            {
+                ShootOver();
             }
         }
     }

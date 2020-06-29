@@ -10,6 +10,7 @@ public class IKTest : MonoBehaviour
     [SerializeField] private Transform targetR;
     [SerializeField] private GameObject weapon;
     private float ikWeight = 0;
+    [SerializeField] private Transform target;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,30 +49,9 @@ public class IKTest : MonoBehaviour
                 }
             }
         }
-        animator.SetIKPositionWeight(AvatarIKGoal.RightHand, ikWeight);
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, ikWeight);
-        //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, ikWeight);
-        /*
-        Vector3 rightPos = targetR.position;
-        rightPos.x = animator.GetIKPosition(AvatarIKGoal.RightHand).x;
-        rightPos.z = animator.GetIKPosition(AvatarIKGoal.RightHand).z;
-        animator.SetIKPosition(AvatarIKGoal.RightHand, rightPos);
-        
-        Vector3 leftPos = targetL.position;
-        leftPos.x = animator.GetIKPosition(AvatarIKGoal.LeftHand).x;
-        leftPos.z = animator.GetIKPosition(AvatarIKGoal.LeftHand).z;
-        animator.SetIKPosition(AvatarIKGoal.LeftHand, leftPos);
-
-        //animator.SetLookAtWeight(ikWeight);
-        //animator.SetLookAtPosition(target.position);
-        */
-        animator.SetIKPosition(AvatarIKGoal.RightHand, targetR.position);
-        animator.SetIKPosition(AvatarIKGoal.LeftHand, targetL.position);
-
-        //animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, ikWeight);
-        animator.SetIKRotationWeight(AvatarIKGoal.RightHand, ikWeight);
-
-        animator.SetIKRotation(AvatarIKGoal.RightHand, targetR.rotation);
-        animator.SetIKRotation(AvatarIKGoal.LeftHand, targetL.rotation);
+        animator.SetLookAtWeight(ikWeight, ikWeight, ikWeight, ikWeight, ikWeight);
+        var targetVec = (target.position - weapon.transform.position) * 100;
+        Debug.DrawLine(weapon.transform.position, target.position, Color.blue);
+        animator.SetLookAtPosition(target.position);
     }
 }

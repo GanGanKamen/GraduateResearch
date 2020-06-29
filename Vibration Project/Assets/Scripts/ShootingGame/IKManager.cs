@@ -7,18 +7,14 @@ namespace Shooting
     public class IKManager : MonoBehaviour
     {
         public bool IsIK { get { return isIK; } }
-        [SerializeField] private Transform leftHand;
-        [SerializeField] private Transform rightHand;
         [SerializeField] private float ikWeight = 0;
         [SerializeField] private Animator soldierAnimator;
+        [SerializeField] private Transform weaponPoint;
+        [SerializeField] private Transform aimPoint;
         private Vector3 targetVec;
         private Vector3 targetPosition;
-        private Vector3 startPos;
-        private Vector3 endPos;
         private bool isIK;
 
-        [SerializeField] private GameObject debugObj0;
-        [SerializeField] private GameObject debugObj1;
         void Start()
         {
 
@@ -27,8 +23,7 @@ namespace Shooting
         // Update is called once per frame
         void Update()
         {
-            if(debugObj0 != null) debugObj0.transform.position = startPos;
-            if(debugObj1 != null) debugObj1.transform.position = endPos;
+
         }
         public void SetIK()
         {
@@ -40,20 +35,6 @@ namespace Shooting
         {
             isIK = false;
         }
-        
-        public void SetTargetVec(Vector3 _startPos,Vector3 _endPos)
-        {
-            targetPosition = endPos;
-            startPos = _startPos;
-            endPos = _endPos;
-
-        }
-        
-
-        public void SetTarget(Vector3 pos)
-        {
-            targetPosition = pos;
-        }
 
         private void OnAnimatorIK(int layerIndex)
         {
@@ -61,19 +42,11 @@ namespace Shooting
             if (isIK) ikWeight = 1.0f;
             else ikWeight = 0;
             soldierAnimator.SetLookAtWeight(ikWeight, ikWeight, ikWeight, ikWeight, ikWeight);
-            targetVec = (endPos - startPos) * 100;
-            Debug.DrawLine(startPos, endPos, Color.blue);
+            targetPosition = aimPoint.position;
+            targetVec = (targetPosition - weaponPoint.position) * 100;
+            Debug.DrawLine(weaponPoint.position, targetPosition, Color.blue);
             soldierAnimator.SetLookAtPosition(targetVec);
-            /*
-            soldierAnimator.SetIKPositionWeight(AvatarIKGoal.RightHand, ikWeight);
-            soldierAnimator.SetIKPositionWeight(AvatarIKGoal.LeftHand, ikWeight);
 
-            soldierAnimator.SetIKPosition(AvatarIKGoal.RightHand, rightHand.position);
-            soldierAnimator.SetIKPosition(AvatarIKGoal.LeftHand, leftHand.position);
-
-            //soldierAnimator.SetIKRotationWeight(AvatarIKGoal.RightHand, ikWeight);
-            soldierAnimator.SetIKRotation(AvatarIKGoal.RightHand, rightHand.rotation);
-            */
         }
     }
 }

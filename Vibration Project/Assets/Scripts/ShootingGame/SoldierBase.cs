@@ -9,17 +9,23 @@ namespace Shooting
         public GameObject Body { get { return body; } }
         public GameObject Weapon { get { return weapon; } }
         public bool IsAim { get { return isAim; } }
+        public bool IsShoot { get { return isShoot; } }
         [SerializeField] private float runSpeed;
         [SerializeField] private GameObject body;
         [SerializeField] private GameObject weapon;
+        [SerializeField] private Transform hitPoint;
         [SerializeField] private Transform muzzle;
         [SerializeField] private Animator soldierAnimator;
         [SerializeField] private bool isAim = false;
         [SerializeField] private IKManager iK;
         [SerializeField] private Vector2 aimAngleLimit;
         [SerializeField] private float aimAngle = 0;
-
-        private float defaultWeaponAngle;
+        [SerializeField] private float bulletSpeed;
+        [SerializeField] private float shootCoolDownTime;
+        [SerializeField] private GameObject bulletPrefab;
+        [SerializeField] private GameObject fireEffect;
+        private bool isShoot = false;
+        private float shootCoolDownCount = 0;
         // Start is called before the first frame update
         void Start()
         {
@@ -85,7 +91,6 @@ namespace Shooting
             aimAngle = 0;
             iK.SetIK();
             soldierAnimator.SetBool("IsAim", true);
-            defaultWeaponAngle = weapon.transform.localEulerAngles.y;
         }
 
         public void CancelAiming()
@@ -101,7 +106,7 @@ namespace Shooting
         {
             if (isAim == false) return;
             var moveVec = transform.forward * inputVec.y + transform.right * inputVec.x;
-            transform.position += moveVec * Time.deltaTime * runSpeed * 0.6f;
+            transform.position += moveVec * Time.deltaTime * runSpeed * 0.4f;
             soldierAnimator.SetFloat("Move_X", inputVec.x);
             soldierAnimator.SetFloat("Move_Y", inputVec.y);
         }
@@ -122,17 +127,36 @@ namespace Shooting
                 
         }
 
-        public void AimCameraRotate(float horizontal, Vector3 startPos,Vector3 endPos)
+        public void PlayerAimRotate(float horizontal)
         {
             if (isAim == false) return;
             transform.localEulerAngles += new Vector3(0, horizontal * Time.deltaTime * 360f, 0);
-            //var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
-            //transform.localRotation = Quaternion.LookRotation(direction);
-            //body.transform.localEulerAngles = Vector3.zero;
-
-
-            iK.SetTargetVec(startPos,endPos);
         }
+
+        public void Shoot()
+        {
+            isShoot = true;
+            if (shootCoolDownCount >= shootCoolDownTime)
+            {
+                shootCoolDownCount = 0;
+                GameObject bulletObj = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
+                bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this.transform);
+                if (fireEffect.activeSelf == false) fireEffect.SetActive(true);
+            }
+            else
+            {
+                shootCoolDownCount += Time.deltaTime;
+            }
+        }
+
+        public void ShootOver()
+        {
+            if (isShoot == false) return;
+            shootCoolDownCount = 0;
+            fireEffect.SetActive(false);
+            isShoot = false;
+        }
+
     }
 }
 
