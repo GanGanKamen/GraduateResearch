@@ -24,7 +24,7 @@ namespace Shooting
             rb.useGravity = false;
             var force = _goalPos - transform.position;
             rb.AddForce(force * speed, ForceMode.Acceleration);
-            Destroy(gameObject, 3f);
+            //Destroy(gameObject, 3f);
         }
     }
 }
