@@ -13,6 +13,7 @@ namespace Shooting
         private float speed;
         private SoldierBase master;
         private bool hasHit = false;
+        private float count = 0;
         [SerializeField] private GameObject hitEffect;
 
         public void Init(Vector3 _goalPos, float _speed, SoldierBase _master)
@@ -32,6 +33,15 @@ namespace Shooting
 
         private void Update()
         {
+            if(count < 3)
+            {
+                count += Time.deltaTime;
+            }
+            else
+            {
+                if (hasHit == false) hasHit = true;
+            }
+
             if (hasHit)
             {
                 Destroy(this.gameObject);

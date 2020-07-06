@@ -20,6 +20,7 @@ namespace Shooting
 
     public class HitManager : MonoBehaviour
     {
+        [SerializeField] private UIManager uiManager; //Player Only
         [SerializeField] private bool vestSystem;
         [SerializeField] private GameObject hitPrefab;
         [SerializeField] private GameObject bloodPrefab;
@@ -50,12 +51,18 @@ namespace Shooting
             }
 
             sortList.Sort((a, b) => (int)a.distance - (int)b.distance);
-            Debug.Log(sortList[0].name);
+            
             var hitObj = Instantiate(hitPrefab, sortList[0].transform.position, Quaternion.LookRotation(muzzle));
+            var dangerText = "";
             if (danger)
             {
                 var bloodObj = Instantiate(bloodPrefab, sortList[0].transform.position, Quaternion.LookRotation(muzzle));
+                sortList[0].isHeat = true;
+                dangerText = ", Heat";
             }
+
+            var msg = sortList[0].name + " , " + "Hit" + dangerText;
+            if(uiManager != null) uiManager.TextOutPut(msg);
         }
     }
 }

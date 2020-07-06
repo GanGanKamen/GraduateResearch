@@ -4,13 +4,22 @@ using UnityEngine;
 
 namespace Shooting
 {
+    public enum Character
+    {
+        Player,
+        Enemy
+    }
+
     public class SoldierBase : MonoBehaviour
     {
         public int HP { get { return hp; } }
+        public int MaxHp { get { return maxHp; } }
         public GameObject Body { get { return body; } }
         public GameObject Weapon { get { return weapon; } }
         public bool IsAim { get { return isAim; } }
         public bool IsShoot { get { return isShoot; } }
+        public Character Character { get { return character; } }
+        [SerializeField] private int maxHp;
         [SerializeField] private float runSpeed;
         [SerializeField] private GameObject body;
         [SerializeField] private GameObject weapon;
@@ -23,20 +32,17 @@ namespace Shooting
         [SerializeField] private float shootCoolDownTime;
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private GameObject fireEffect;
+        [SerializeField] private GameObject deadPrefab;
         [SerializeField] private HitManager hitManager;
         private int hp = 100;
+        private Character character;
         private bool isShoot = false;
         private float shootCoolDownCount = 0;
-        // Start is called before the first frame update
-        void Start()
+
+        public void Init(Character _character)
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            hp = maxHp;
+            character = _character;
         }
 
         public void CharacterMove(Vector3 _direction)
@@ -93,6 +99,11 @@ namespace Shooting
             soldierAnimator.SetBool("IsAim", true);
         }
 
+        public void SetAimHight(float hight)
+        {
+            iK.SetAimHight(hight);
+        }
+
         public void CancelAiming()
         {
             isAim = false;
@@ -145,11 +156,35 @@ namespace Shooting
         {
             if (hp <= 0) return;
             hp -= damage;
-            if (hp < 0) hp = 0;
             if(hp > 50) hitManager.GetDamage(muzzle, false);
             else hitManager.GetDamage(muzzle, true);
+
+            if (hp <= 0)
+            {
+                hp = 0;
+                Dead();
+            }
         }
 
+        public void Dead()
+        {
+            switch (character)
+            {
+                case Character.Enemy:
+                    var stageManager = 
+                        GameObject.Find("StageManager").GetComponent<StageManager>();
+                    var ai = GetComponent<AIManager>();
+                    stageManager.EnemyDead(ai.InstancePoint);
+                    var deadObj = Instantiate(deadPrefab, transform.position, Quaternion.identity);
+                    Destroy(gameObject);
+                    break;
+                case Character.Player:
+                    UnityEngine.SceneManagement.Scene loadScene 
+                        = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(loadScene.name);
+                    break;
+            }
+        }
     }
 }
 

@@ -11,7 +11,7 @@ namespace Shooting
         // Start is called before the first frame update
         void Start()
         {
-
+            Init(Character.Player);
         }
 
         // Update is called once per frame

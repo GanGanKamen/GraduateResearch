@@ -8,6 +8,7 @@ namespace Shooting
     {
         public Vector3 FirstPosition { get { return transform.position; } }
         public Vector3 SecondPosition { get { return second.position; } }
+        public bool IsApp { get; set; }
         [SerializeField] private Transform second;
     }
 }
