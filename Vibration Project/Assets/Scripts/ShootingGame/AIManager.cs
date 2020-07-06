@@ -14,7 +14,7 @@ namespace Shooting
 
     public class AIManager : SoldierBase
     {
-        private AIStatus status = AIStatus.Standby;
+        [SerializeField]private AIStatus status = AIStatus.Standby;
         private SoldierBase target;
         private Vector3 firstPosition;
         private Vector3 secordPosition;
@@ -34,6 +34,8 @@ namespace Shooting
                     GoToSecord();
                     break;
                 case AIStatus.Attack:
+                    LookAtTarget();
+                    Shoot();
                     break;
             }
 
@@ -53,6 +55,21 @@ namespace Shooting
             var direction = Vector3.Scale(
                 (secordPosition - transform.position),new Vector3(1,0,1));
             CharacterMove(direction);
+
+            var dis = Vector3.Distance(transform.position, secordPosition);
+            if(dis <= 0.1f)
+            {
+                CharacterStand();
+                SetAiming();
+                status = AIStatus.Attack;
+            }
+        }
+
+        private void LookAtTarget()
+        {
+            var dir = Vector3.Scale((target.transform.position - transform.position),
+                new Vector3(1, 0, 1));
+            SetTransformRotation(dir.normalized);
             
         }
     }
