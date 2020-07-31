@@ -36,6 +36,14 @@ namespace Shooting
             isIK = false;
         }
 
+        public void SetAimHight(float hight)
+        {
+            var oldPos = aimPoint.localPosition;
+            var aimPos = new Vector3(oldPos.x, oldPos.y +hight, oldPos.z);
+            aimPoint.localPosition = aimPos;
+            //Debug.Log(aimPos);
+        }
+
         private void OnAnimatorIK(int layerIndex)
         {
 

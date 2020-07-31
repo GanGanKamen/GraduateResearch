@@ -4,12 +4,22 @@ using UnityEngine;
 
 namespace Shooting
 {
+    public enum Character
+    {
+        Player,
+        Enemy
+    }
+
     public class SoldierBase : MonoBehaviour
     {
+        public int HP { get { return hp; } }
+        public int MaxHp { get { return maxHp; } }
         public GameObject Body { get { return body; } }
         public GameObject Weapon { get { return weapon; } }
         public bool IsAim { get { return isAim; } }
         public bool IsShoot { get { return isShoot; } }
+        public Character Character { get { return character; } }
+        [SerializeField] private int maxHp;
         [SerializeField] private float runSpeed;
         [SerializeField] private GameObject body;
         [SerializeField] private GameObject weapon;
@@ -18,24 +28,21 @@ namespace Shooting
         [SerializeField] private Animator soldierAnimator;
         [SerializeField] private bool isAim = false;
         [SerializeField] private IKManager iK;
-        [SerializeField] private Vector2 aimAngleLimit;
-        [SerializeField] private float aimAngle = 0;
         [SerializeField] private float bulletSpeed;
         [SerializeField] private float shootCoolDownTime;
         [SerializeField] private GameObject bulletPrefab;
         [SerializeField] private GameObject fireEffect;
+        [SerializeField] private GameObject deadPrefab;
+        [SerializeField] private HitManager hitManager;
+        private int hp = 100;
+        private Character character;
         private bool isShoot = false;
         private float shootCoolDownCount = 0;
-        // Start is called before the first frame update
-        void Start()
+
+        public void Init(Character _character)
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            hp = maxHp;
+            character = _character;
         }
 
         public void CharacterMove(Vector3 _direction)
@@ -88,16 +95,19 @@ namespace Shooting
         {
             isAim = true;
             //SetAimRotation();
-            aimAngle = 0;
             iK.SetIK();
             soldierAnimator.SetBool("IsAim", true);
+        }
+
+        public void SetAimHight(float hight)
+        {
+            iK.SetAimHight(hight);
         }
 
         public void CancelAiming()
         {
             isAim = false;
             ResetRotation();
-            aimAngle = 0;
             iK.ResetIK();
             soldierAnimator.SetBool("IsAim", false);
         }
@@ -109,22 +119,6 @@ namespace Shooting
             transform.position += moveVec * Time.deltaTime * runSpeed * 0.4f;
             soldierAnimator.SetFloat("Move_X", inputVec.x);
             soldierAnimator.SetFloat("Move_Y", inputVec.y);
-        }
-
-        public void AimRotate(float horizontal, float vertical)
-        {
-            if (isAim == false) return;
-            transform.localEulerAngles += new Vector3(0,horizontal * Time.deltaTime * 360f,0);
-            var direction = Vector3.Scale(transform.forward, new Vector3(1, 0, 1));
-            transform.localRotation = Quaternion.LookRotation(direction);
-            body.transform.localEulerAngles = Vector3.zero;
-
-            
-            aimAngle += vertical * Time.deltaTime * 360f;
-
-            if (aimAngle > aimAngleLimit.y) aimAngle = aimAngleLimit.y;
-            else if (aimAngle < aimAngleLimit.x) aimAngle = aimAngleLimit.x;
-                
         }
 
         public void PlayerAimRotate(float horizontal)
@@ -141,7 +135,7 @@ namespace Shooting
             {
                 shootCoolDownCount = 0;
                 GameObject bulletObj = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
-                bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this.transform);
+                bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this);
                 if (fireEffect.activeSelf == false) fireEffect.SetActive(true);
             }
             else
@@ -158,6 +152,39 @@ namespace Shooting
             isShoot = false;
         }
 
+        public void GetDamaged(int damage,Vector3 muzzle)
+        {
+            if (hp <= 0) return;
+            hp -= damage;
+            if(hp > 50) hitManager.GetDamage(muzzle, false);
+            else hitManager.GetDamage(muzzle, true);
+
+            if (hp <= 0)
+            {
+                hp = 0;
+                Dead();
+            }
+        }
+
+        public void Dead()
+        {
+            switch (character)
+            {
+                case Character.Enemy:
+                    var stageManager = 
+                        GameObject.Find("StageManager").GetComponent<StageManager>();
+                    var ai = GetComponent<AIManager>();
+                    stageManager.EnemyDead(ai.InstancePoint);
+                    var deadObj = Instantiate(deadPrefab, transform.position, Quaternion.identity);
+                    Destroy(gameObject);
+                    break;
+                case Character.Player:
+                    UnityEngine.SceneManagement.Scene loadScene 
+                        = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(loadScene.name);
+                    break;
+            }
+        }
     }
 }
 
