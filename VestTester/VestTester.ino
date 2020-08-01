@@ -4,8 +4,8 @@ bool moterSwitch = false;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  pinMode(12,OUTPUT); //モーター
-  pinMode(13,OUTPUT); //ヒーター
+  pinMode(13,OUTPUT); //モーター
+  pinMode(12,OUTPUT); //ヒーター
 }
 
 void loop() {
@@ -16,9 +16,8 @@ void loop() {
 }
 
 void GetSerial(){
-  while(Serial.available() > 0){
+  if(Serial.available() > 0){
     char cmd = Serial.read();
-    Serial.println(cmd);
     switch(cmd){
       case'a':  //ヒーター　オン
       heaterSwitch = true;
