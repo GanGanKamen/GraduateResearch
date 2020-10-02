@@ -1,10 +1,11 @@
+
 bool heaterSwitch = false;
 bool moterSwitch = false;
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
-  pinMode(13,OUTPUT); //モーター
+  pinMode(2,OUTPUT); //モーター
   pinMode(12,OUTPUT); //ヒーター
 }
 
@@ -38,11 +39,11 @@ void GetSerial(){
 void Moter(){
   switch(moterSwitch){
     case true:
-    digitalWrite(13, HIGH);
+    analogWrite(2, 255);
     Serial.println("Moter_ON");
     break;
     case false:
-    digitalWrite(13, LOW);
+    analogWrite(2, 0);
     Serial.println("Moter_OFF");
     break;
   }
@@ -51,11 +52,11 @@ void Moter(){
 void Heater(){
   switch(heaterSwitch){
     case true:
-    digitalWrite(12, HIGH);
+    analogWrite(12, 255);
     Serial.println("Heater_ON");
     break;
     case false:
-    digitalWrite(12, LOW);
+    analogWrite(12, 0);
     Serial.println("Heater_OFF");
     break;
   }

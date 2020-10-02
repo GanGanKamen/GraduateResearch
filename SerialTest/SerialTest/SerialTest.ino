@@ -9,7 +9,7 @@ float receiveData = 0;
 // the setup function runs once when you press reset or power the board
 void setup() {
 	Serial.begin(115200);
-	pinMode(12, OUTPUT);
+	pinMode(4, OUTPUT);
 }
 
 // the loop function runs over and over again until power down or reset
@@ -18,11 +18,11 @@ void loop() {
 	switch (onOff)
 	{
 	case true:
-		digitalWrite(12, HIGH);
+		digitalWrite(4, HIGH);
 		Serial.println("on");
 		break;
 	case false:
-		digitalWrite(12, LOW);
+		digitalWrite(4, LOW);
 		break;
 	}
 }
