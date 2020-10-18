@@ -16,23 +16,30 @@
 
 // Define Functions below here or use other .ino or cpp files
 //
-bool heaterSwitch = false;
-bool moterSwitch = false;
-
+const int SerialSpeed = 115200;
+const int Size = 4;
+Parts parts[8];
 // The setup() function runs once each time the micro-controller starts
 void setup()
 {
-	bool heaterSwitch = false;
-	bool moterSwitch = false;
+	Serial.begin(SerialSpeed);
+	parts[8] = {
+	Parts(Moter,13,'a','b'),
+	Parts(Heater,12,'c','d'),
+	Parts(Moter,11,'e','f'),
+	Parts(Heater,10,'g','h'),
+	Parts(Moter,9,'i','j'),
+	Parts(Heater,8,'k','l'),
+	Parts(Moter,7,'m','n'),
+	Parts(Heater,6,'o','p')
+	};
 
 }
 
 // Add the main program code into the continuous loop() function
 void loop()
 {
-	GetSerial();
-	Moter();
-	Heater();
+
 
 }
 
@@ -41,43 +48,53 @@ void GetSerial() {
 		char cmd = Serial.read();
 		switch (cmd) {
 		case'a':  //ヒーター　オン
-			heaterSwitch = true;
+			parts[0].ON();
 			break;
 		case'b':  //ヒーター　オフ
-			heaterSwitch = false;
+			parts[0].OFF();
 			break;
 		case'c':
-			moterSwitch = true;
+			parts[1].ON();
 			break;
 		case'd':
-			moterSwitch = false;
+			parts[1].OFF();
+			break;
+		case'e':
+			parts[2].ON();
+			break;
+		case'f':
+			parts[2].OFF();
+			break;
+		case'g':
+			parts[3].ON();
+			break;
+		case'h':
+			parts[3].OFF();
+			break;
+		case'i':
+			parts[4].ON();
+			break;
+		case'j':
+			parts[4].OFF();
+			break;
+		case'k':
+			parts[5].ON();
+			break;
+		case'l':
+			parts[5].OFF();
+			break;
+		case'm':
+			parts[6].ON();
+			break;
+		case'n':
+			parts[6].OFF();
+			break;
+		case'o':
+			parts[7].ON();
+			break;
+		case'p':
+			parts[7].OFF();
 			break;
 		}
-	}
-}
-
-void Moter() {
-	switch (moterSwitch) {
-	case true:
-		digitalWrite(13, HIGH);
-		Serial.println("Moter_ON");
-		break;
-	case false:
-		digitalWrite(13, LOW);
-		Serial.println("Moter_OFF");
-		break;
-	}
-}
-
-void Heater() {
-	switch (heaterSwitch) {
-	case true:
-		digitalWrite(12, HIGH);
-		Serial.println("Heater_ON");
-		break;
-	case false:
-		digitalWrite(12, LOW);
-		Serial.println("Heater_OFF");
-		break;
 	}
 }
