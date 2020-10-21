@@ -16,7 +16,7 @@ namespace Shooting
     {
         public EnemyPoint InstancePoint { get { return instancePoint; } }
         [SerializeField]private AIStatus status = AIStatus.Standby;
-        private SoldierBase target;
+        private Transform target;
         private Vector3 firstPosition;
         private Vector3 secordPosition;
         private EnemyPoint instancePoint;
@@ -44,7 +44,7 @@ namespace Shooting
             firstPosition = transform.position;
             secordPosition = _enemyPoint.SecondPosition;
             status = AIStatus.Approach;
-            target = GameObject.FindGameObjectWithTag("Player").GetComponent<SoldierBase>();
+            target = GameObject.FindGameObjectWithTag("Player").transform;
             Init(Character.Enemy);
         }
 
