@@ -11,6 +11,7 @@ namespace Shooting
         [SerializeField] private Animator soldierAnimator;
         [SerializeField] private Transform weaponPoint;
         [SerializeField] private Transform aimPoint;
+        [SerializeField] private float aimErrorHight;
         private Vector3 targetVec;
         private Vector3 targetPosition;
         private bool isIK;
@@ -36,12 +37,11 @@ namespace Shooting
             isIK = false;
         }
 
-        public void SetAimHight(float hight)
+        public void SetAimHight(Transform target)
         {
-            var oldPos = aimPoint.localPosition;
-            var aimPos = new Vector3(oldPos.x, oldPos.y +hight, oldPos.z);
-            aimPoint.localPosition = aimPos;
-            //Debug.Log(aimPos);
+            var targetPos = target.position;
+            var aimPos = new Vector3(targetPos.x, targetPos.y +aimErrorHight, targetPos.z);
+            aimPoint.position = aimPos;
         }
 
         private void OnAnimatorIK(int layerIndex)

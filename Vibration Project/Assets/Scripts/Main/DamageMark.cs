@@ -72,6 +72,7 @@ public class DamageMark : MonoBehaviour
         mark.gameObject.SetActive(false);
         active = false;
         _target = null;
+        manager.ReleaseMark();
         Destroy(target0);
         yield break;
     }

@@ -8,30 +8,17 @@ public class HitManager : MonoBehaviour
 
     private MainPlayer player;
     private DamageMark[] marks;
+    private List<Transform> targets;
+
     [SerializeField] private float activeTime;
 
-    private int nowActiveSize = 0;
-    private int maxActiveSize;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(isInited)
-        for (int i = 0; i < marks.Length; i++)
-        {
-            marks[i].MarkRotate();
-        }
-    }
+    [SerializeField] private int nowActiveSize = 0;
+    [SerializeField] private int maxActiveSize;
 
     public void Init(MainPlayer mainPlayer)
     {
         player = mainPlayer;
+        targets = new List<Transform>();
         var markList = new List<DamageMark>();
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -53,9 +40,24 @@ public class HitManager : MonoBehaviour
         isInited = true;
     }
 
+    public void HitMarkUpdate()
+    {
+        if (isInited)
+            for (int i = 0; i < marks.Length; i++)
+            {
+                marks[i].MarkRotate();
+            }
+    }
+
     public void GetDamege(Transform target, HP_Status hP_Status)
     {
-        marks[nowActiveSize].SetMarkActive(target, hP_Status);
+        if (nowActiveSize >= maxActiveSize) return;
+        bool oldTarget = false;
+        for(int i = 0; i< targets.Count; i++)
+        {
+            if (target == targets[i]) oldTarget = true;
+        }
+        if(oldTarget == false) marks[nowActiveSize].SetMarkActive(target, hP_Status);
     }
 
     public void UseMark()
@@ -69,4 +71,6 @@ public class HitManager : MonoBehaviour
         if(nowActiveSize > 0)
         nowActiveSize -= 1;
     }
+
+    
 }

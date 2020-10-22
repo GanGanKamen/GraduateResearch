@@ -99,9 +99,9 @@ namespace Shooting
             soldierAnimator.SetBool("IsAim", true);
         }
 
-        public void SetAimHight(float hight)
+        public void SetAimHight(Transform target)
         {
-            iK.SetAimHight(hight);
+            iK.SetAimHight(target);
         }
 
         public void CancelAiming()
@@ -135,7 +135,8 @@ namespace Shooting
             {
                 shootCoolDownCount = 0;
                 GameObject bulletObj = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
-                bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this);
+                bulletObj.GetComponent<BulletMain>().Init(hitPoint.position, bulletSpeed, this);
+                //bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this);
                 if (fireEffect.activeSelf == false) fireEffect.SetActive(true);
             }
             else

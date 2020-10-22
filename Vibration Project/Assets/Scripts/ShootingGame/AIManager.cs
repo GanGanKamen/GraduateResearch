@@ -21,6 +21,13 @@ namespace Shooting
         private Vector3 secordPosition;
         private EnemyPoint instancePoint;
         private bool hasSetHight = false;
+        [SerializeField] private EnemyPoint testEnemyPoint;
+
+        private void Start()
+        {
+            Init(testEnemyPoint);
+        }
+
         // Update is called once per frame
         void Update()
         {
@@ -70,14 +77,16 @@ namespace Shooting
             var dir = Vector3.Scale((target.transform.position - transform.position),
                 new Vector3(1, 0, 1));
             SetTransformRotation(dir.normalized);
+            SetAimHight(target);
+            /*
             var hight = Mathf.Abs(transform.position.y - target.transform.position.y);
             if (hight >= 0.5f && hasSetHight == false)
             {
-                SetAimHight(target.transform.position.y - transform.position.y);
+                SetAimHight();
                 hasSetHight = true;
                 Debug.Log(target.transform.position.y - transform.position.y);
             }
-            
+            */
         }
     }
 }
