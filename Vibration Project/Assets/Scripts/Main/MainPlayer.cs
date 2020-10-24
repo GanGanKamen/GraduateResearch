@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class MainPlayer : MonoBehaviour
 {
+    [Header("Defult")]
     [SerializeField] private Transform front;
     [SerializeField] private Camera mainCamera;
+    [Header("Paramater")]
+    [SerializeField] private float hp;
     [SerializeField] private float rotateSpeed;
     [SerializeField] private int hitPointEndruance;
     [SerializeField] private float bloodRecoveryTime;
     [SerializeField] private int armorShield;
+    [Header("Manager")]
     [SerializeField] private HitManager hitManager;
+    [SerializeField] private PostManager postManager;
 
     public Vector3 FrontVec { get { return CharacterVec(); } }
     public bool Dead { get { return _dead; } }
 
-    [SerializeField] private float _hp;
+
     private HitPoint[] hitPoints;
     private bool _dead = false;
     // Start is called before the first frame update
@@ -23,12 +28,14 @@ public class MainPlayer : MonoBehaviour
     {
         HitPointsInit();
         hitManager.Init(this);
+        postManager.Init(hp);
     }
 
     // Update is called once per frame
     void Update()
     {
         hitManager.HitMarkUpdate();
+        postManager.PostUpdate();
     }
 
     public void GetDamege(Transform target)
@@ -42,11 +49,13 @@ public class MainPlayer : MonoBehaviour
         }
         else
         {
-            if (_hp > 0) _hp -= 1;
+            if (hp > 0) hp -= 1;
             hitManager.GetDamege(target, HP_Status.Pinch);
-            if (_hp <= 0)
+            if (postManager.IsPost == false) postManager.PostON();
+            postManager.GetPostAction(PostManager.Action.Down);
+            if (hp <= 0)
             {
-                _hp = 0;
+                hp = 0;
                 _dead = true;
             }
         }
