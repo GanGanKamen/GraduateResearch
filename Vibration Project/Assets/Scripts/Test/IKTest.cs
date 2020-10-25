@@ -53,8 +53,8 @@ public class IKTest : MonoBehaviour
             }
         }
         animator.SetLookAtWeight(ikWeight, ikWeight, ikWeight, ikWeight, ikWeight);
-        var lookAtVec = (target.position - transform.position).normalized;
-        var lookAtPosition = transform.position + lookAtVec+ transform.right * aimErrorHorizon; 
+        var lookAtPosition = transform.right * aimErrorHorizon + target.position
+                - new Vector3(0, aimErrorHight, 0);
         animator.SetLookAtPosition(lookAtPosition);
     }
 }

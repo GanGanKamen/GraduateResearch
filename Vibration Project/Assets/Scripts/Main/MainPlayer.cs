@@ -36,6 +36,7 @@ public class MainPlayer : MonoBehaviour
     {
         hitManager.HitMarkUpdate();
         postManager.PostUpdate();
+        KeyCtrl();
     }
 
     public void GetDamege(Transform target)
@@ -84,7 +85,7 @@ public class MainPlayer : MonoBehaviour
         if (_dead) return;
         if (Input.GetAxis("Horizontal") != 0)
             transform.localEulerAngles += 
-                new Vector3(0, rotateSpeed * Time.deltaTime, 0);
+                new Vector3(0, rotateSpeed * Time.deltaTime* Input.GetAxis("Horizontal"), 0);
 
     }
 

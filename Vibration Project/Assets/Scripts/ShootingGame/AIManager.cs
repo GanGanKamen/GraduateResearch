@@ -9,7 +9,8 @@ namespace Shooting
     {
         Standby,
         Approach,
-        Attack
+        Attack,
+        Run
     }
 
     public class AIManager : SoldierBase
@@ -20,12 +21,15 @@ namespace Shooting
         private Vector3 firstPosition;
         private Vector3 secordPosition;
         private EnemyPoint instancePoint;
-        private bool hasSetHight = false;
+        private float saveTime;
+        private float saveTimeCount;
         [SerializeField] private EnemyPoint testEnemyPoint;
+
+        private float coolCount = 0;
 
         private void Start()
         {
-            Init(testEnemyPoint);
+
         }
 
         // Update is called once per frame
@@ -38,7 +42,12 @@ namespace Shooting
                     break;
                 case AIStatus.Attack:
                     LookAtTarget();
+                    if (AttackCooling() == true) return;
                     Shoot();
+                    StaySave();
+                    break;
+                case AIStatus.Run:
+                    GoToFirst();
                     break;
             }
 
@@ -48,11 +57,19 @@ namespace Shooting
         {
             instancePoint = _enemyPoint;
             transform.position = _enemyPoint.FirstPosition;
-            firstPosition = transform.position;
+            firstPosition = _enemyPoint.transform.position;
             secordPosition = _enemyPoint.SecondPosition;
+            saveTime = _enemyPoint.saveTime;
             status = AIStatus.Approach;
             target = GameObject.FindGameObjectWithTag("Player").transform;
+            iK.SetError(_enemyPoint.aimErrorHorizon, _enemyPoint.aimErrorHight);
             Init(Character.Enemy);
+        }
+
+        public void Run()
+        {
+            if (status == AIStatus.Run) return;
+            status = AIStatus.Run;
         }
 
         private void GoToSecord()
@@ -72,6 +89,23 @@ namespace Shooting
             }
         }
 
+        private void GoToFirst()
+        {
+            var direction = Vector3.Scale(
+                (firstPosition - transform.position), new Vector3(1, 0, 1));
+            CharacterMove(direction);
+            var pos0 = Vector3.Scale(transform.position, new Vector3(1, 0, 1));
+            var pos1 = Vector3.Scale(firstPosition, new Vector3(1, 0, 1));
+            var dis = Vector3.Distance(pos0, pos1);
+            Debug.Log(dis);
+            if (dis <= 0.5f)
+            {
+                CharacterStand();
+                instancePoint.EnemyDestory();
+                Destroy(gameObject);
+            }
+        }
+
         private void LookAtTarget()
         {
             var dir = Vector3.Scale((target.transform.position - transform.position),
@@ -87,6 +121,44 @@ namespace Shooting
                 Debug.Log(target.transform.position.y - transform.position.y);
             }
             */
+        }
+
+        private bool AttackCooling()
+        {
+            if(coolCount < 1)
+            {
+                coolCount += Time.deltaTime;
+                if(coolCount >= 1)
+                {
+                    coolCount = 1;
+                }
+                return true;
+            }
+
+            else
+            {
+                return false;
+            }
+        }
+
+        private void StaySave()
+        {
+            if (saveTime <= 0) return;
+            if(saveTimeCount < saveTime )
+            {
+                saveTimeCount += Time.deltaTime;
+            }
+            else
+            {
+                if(status != AIStatus.Run)
+                {
+                    saveTimeCount = 0;
+                    ShootOver();
+                    CancelAiming();
+                    status = AIStatus.Run;
+                }
+            }
+            if(target.GetComponent<MainPlayer>().Dead) status = AIStatus.Run;
         }
     }
 }

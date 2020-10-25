@@ -38,6 +38,12 @@ namespace Shooting
             isIK = false;
         }
 
+        public void SetError(float Horizon,float Hight)
+        {
+            aimErrorHorizon = Horizon;
+            aimErrorHight = Hight;
+        }
+
         public void SetAimHight(Transform target)
         {
             var targetPos = target.position;

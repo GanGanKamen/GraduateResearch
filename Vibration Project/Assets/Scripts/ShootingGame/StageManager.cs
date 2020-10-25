@@ -44,7 +44,7 @@ namespace Shooting
             {
                 if(enemyPoints[i] == point)
                 {
-                    enemyPoints[i].IsApp = false;
+                    //enemyPoints[i].IsApp = false;
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace Shooting
         {
             var enemyObj = Instantiate(EnemyPrefab, Vector3.zero, Quaternion.identity);
             var enemyAI = enemyObj.GetComponent<AIManager>();
-            point.IsApp = true;
+            //point.IsApp = true;
             enemyAI.Init(point);
         }
     }
