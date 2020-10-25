@@ -11,6 +11,9 @@ public class IKTest : MonoBehaviour
     [SerializeField] private GameObject weapon;
     private float ikWeight = 0;
     [SerializeField] private Transform target;
+
+    [SerializeField] private float aimErrorHight;
+    [SerializeField] private float aimErrorHorizon;
     // Start is called before the first frame update
     void Start()
     {
@@ -50,8 +53,8 @@ public class IKTest : MonoBehaviour
             }
         }
         animator.SetLookAtWeight(ikWeight, ikWeight, ikWeight, ikWeight, ikWeight);
-        var targetVec = (target.position - weapon.transform.position) * 100;
-        Debug.DrawLine(weapon.transform.position, target.position, Color.blue);
-        animator.SetLookAtPosition(target.position);
+        var lookAtVec = (target.position - transform.position).normalized;
+        var lookAtPosition = transform.position + lookAtVec+ transform.right * aimErrorHorizon; 
+        animator.SetLookAtPosition(lookAtPosition);
     }
 }

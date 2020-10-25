@@ -12,6 +12,7 @@ namespace Shooting
         [SerializeField] private Transform weaponPoint;
         [SerializeField] private Transform aimPoint;
         [SerializeField] private float aimErrorHight;
+        [SerializeField] private float aimErrorHorizon;
         private Vector3 targetVec;
         private Vector3 targetPosition;
         private bool isIK;
@@ -40,7 +41,7 @@ namespace Shooting
         public void SetAimHight(Transform target)
         {
             var targetPos = target.position;
-            var aimPos = new Vector3(targetPos.x, targetPos.y +aimErrorHight, targetPos.z);
+            var aimPos = targetPos;
             aimPoint.position = aimPos;
         }
 
@@ -51,9 +52,9 @@ namespace Shooting
             else ikWeight = 0;
             soldierAnimator.SetLookAtWeight(ikWeight, ikWeight, ikWeight, ikWeight, ikWeight);
             targetPosition = aimPoint.position;
-            targetVec = (targetPosition - weaponPoint.position) * 100;
-            Debug.DrawLine(weaponPoint.position, targetPosition, Color.blue);
-            soldierAnimator.SetLookAtPosition(targetVec);
+            var lookAtPosition = transform.right * aimErrorHorizon + aimPoint.position
+                - new Vector3(0, aimErrorHight,0);
+            soldierAnimator.SetLookAtPosition(lookAtPosition);
 
         }
     }
