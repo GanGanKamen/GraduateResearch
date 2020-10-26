@@ -69,6 +69,9 @@ namespace Shooting
         public void Run()
         {
             if (status == AIStatus.Run) return;
+            saveTimeCount = 0;
+            ShootOver();
+            CancelAiming();
             status = AIStatus.Run;
         }
 
@@ -97,7 +100,6 @@ namespace Shooting
             var pos0 = Vector3.Scale(transform.position, new Vector3(1, 0, 1));
             var pos1 = Vector3.Scale(firstPosition, new Vector3(1, 0, 1));
             var dis = Vector3.Distance(pos0, pos1);
-            Debug.Log(dis);
             if (dis <= 0.5f)
             {
                 CharacterStand();
@@ -152,13 +154,10 @@ namespace Shooting
             {
                 if(status != AIStatus.Run)
                 {
-                    saveTimeCount = 0;
-                    ShootOver();
-                    CancelAiming();
-                    status = AIStatus.Run;
+                    Run();
                 }
             }
-            if(target.GetComponent<MainPlayer>().Dead) status = AIStatus.Run;
+            if(target.GetComponent<MainPlayer>().Dead)Run();
         }
     }
 }

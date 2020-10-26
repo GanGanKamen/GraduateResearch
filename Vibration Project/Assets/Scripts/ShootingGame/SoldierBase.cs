@@ -27,7 +27,7 @@ namespace Shooting
         [SerializeField] private Transform muzzle;
         [SerializeField] private Animator soldierAnimator;
         [SerializeField] private bool isAim = false;
-        [SerializeField] private IKManager iK;
+        [SerializeField] public IKManager iK;
         [SerializeField] private float bulletSpeed;
         [SerializeField] private float shootCoolDownTime;
         [SerializeField] private GameObject bulletPrefab;

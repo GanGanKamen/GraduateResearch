@@ -10,7 +10,7 @@ public class StageManager : MonoBehaviour
 
     private MainPlayer player;
     private Shooting.EnemyPoint[] enemyPoints;
-    private float timer = 0;
+    [SerializeField]private float timer = 0;
     private bool firstHasRun = false;
     // Start is called before the first frame update
     void Start()
@@ -25,13 +25,13 @@ public class StageManager : MonoBehaviour
         enemyPoints = epList.ToArray();
         if(frontPoint != null) frontPoint.EnemyInstance();
         enemyPoints = PointsShuffle(enemyPoints);
-        TestAllIntance();
+        //TestAllIntance();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        TimeLineUpdate();
     }
 
     private void TestAllIntance()
@@ -44,6 +44,7 @@ public class StageManager : MonoBehaviour
 
     private void TimeLineUpdate()
     {
+        if (player.Dead) return;
         timer += Time.deltaTime;
         if (timer >= firstTime)
         {
@@ -54,16 +55,17 @@ public class StageManager : MonoBehaviour
             }
         }
 
-        else
+        if(firstHasRun)
         {
             var afterTime = timer - firstTime;
             for (int i = 0; i < enemyPoints.Length; i++)
             {
-                var periods = period * (i + 1);
+                var periods = period * i;
                 if (afterTime >= periods)
                 {
-                    if (enemyPoints[i].IsApp) return;
+                    if (enemyPoints[i].IsApp == false)
                     enemyPoints[i].EnemyInstance();
+                   // Debug.Log(i + "  ,Instance");
                 }
             }
         }
@@ -84,5 +86,6 @@ public class StageManager : MonoBehaviour
         }
 
         return result;
+
     }
 }

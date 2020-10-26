@@ -23,6 +23,7 @@ public class MainPlayer : MonoBehaviour
 
     private HitPoint[] hitPoints;
     private bool _dead = false;
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -57,7 +58,7 @@ public class MainPlayer : MonoBehaviour
             if (hp <= 0)
             {
                 hp = 0;
-                _dead = true;
+                Die();
             }
         }
     }
@@ -101,5 +102,12 @@ public class MainPlayer : MonoBehaviour
         }
 
         else return 0;
+    }
+
+    private void Die()
+    {
+        _dead = true;
+        hp = 0;
+        animator.SetBool("die", true);
     }
 }
