@@ -20,18 +20,6 @@ public class Fader : MonoBehaviour
     private static GameObject fader;
     private static GameObject faderBlack;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     static public void FadeOut(float time)
     {
         fader.GetComponent<FadeCanvas>().FadeOut(time);

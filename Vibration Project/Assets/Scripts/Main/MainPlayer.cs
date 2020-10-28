@@ -27,6 +27,7 @@ public class MainPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         HitPointsInit();
         hitManager.Init(this);
         postManager.Init(hp);
@@ -55,7 +56,7 @@ public class MainPlayer : MonoBehaviour
             hitManager.GetDamege(target, HP_Status.Pinch);
             if (postManager.IsPost == false) postManager.PostON();
             postManager.GetPostAction(PostManager.Action.Down);
-            if (hp <= 0)
+            if (hp <= 0 && _dead == false)
             {
                 hp = 0;
                 Die();
