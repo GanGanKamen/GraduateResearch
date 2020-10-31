@@ -58,5 +58,7 @@ void loop() {
   float pitch = MadgwickFilter.getPitch();
   float yaw   = MadgwickFilter.getYaw();
 
-  Serial.print(roll);  Serial.println(",");
+  Serial.print(roll);  Serial.print(",");
+  Serial.print(pitch);  Serial.print(",");
+  Serial.print(yaw);  Serial.println(",");
 }

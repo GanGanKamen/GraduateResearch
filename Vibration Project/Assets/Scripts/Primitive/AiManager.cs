@@ -38,11 +38,12 @@ namespace Primitive {
             CharacterStand();
             SetAiming();
             _isAttack = true;
+
         }
 
         public void AttackCancel()
         {
-            if(_isAttack == false)
+            if (_isAttack == false) return;
             ShootOver();
             CancelAiming();
             _isAttack = false;
@@ -62,7 +63,7 @@ namespace Primitive {
             if (coolCount < 1)
             {
                 coolCount += Time.deltaTime;
-                if (coolCount >= 1)
+                if (coolCount > 1)
                 {
                     coolCount = 1;
                 }

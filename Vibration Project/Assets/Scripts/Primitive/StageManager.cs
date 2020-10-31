@@ -10,13 +10,25 @@ namespace Primitive
         [SerializeField] private float period;
 
         private MainPlayer player;
-        private List<AiManager> enemys;
+        [SerializeField]private List<AiManager> enemys;
         [SerializeField] private float timer = 0;
 
         // Start is called before the first frame update
         void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
+            EnemysInit();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            timer += Time.deltaTime;
+            EnemysUpdate();
+        }
+
+        private void EnemysInit()
+        {
             var epList = new List<AiManager>();
             foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))
             {
@@ -25,12 +37,33 @@ namespace Primitive
             }
             var enemyArray = epList.ToArray();
             enemyArray = EnemyShuffle(enemyArray);
+
+            enemys = new List<AiManager>();
+            enemys.Add(enemyArray[0]);
+            
+            epList.Remove(enemyArray[0]);
+            epList.Add(frontEnemy);
+            var remainEnemys = epList.ToArray();
+            remainEnemys = EnemyShuffle(remainEnemys);
+            enemys.AddRange(remainEnemys);
+
+            for (int i = 0; i < enemys.Count; i++)
+            {
+                enemys[i].Init(player.transform);
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        private void EnemysUpdate()
         {
-
+            for(int i = 0; i < enemys.Count; i++)
+            {
+                enemys[i].StatusUpdate();
+                if(timer >= period * i)
+                {
+                    if(enemys[i].IsAttack == false)
+                    enemys[i].ToAttack();
+                }
+            }
         }
 
         private AiManager[] EnemyShuffle(AiManager[] array)

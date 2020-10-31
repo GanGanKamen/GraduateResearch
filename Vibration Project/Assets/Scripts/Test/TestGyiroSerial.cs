@@ -36,6 +36,10 @@ public class TestGyiroSerial : MonoBehaviour
                 isInit = true;
             }
         }
+        else
+        {
+            
+        }
     }
 
     public void ReadComplateString(object data)
@@ -54,11 +58,12 @@ public class TestGyiroSerial : MonoBehaviour
         switch (isInit)
         {
             case false:
-                preX = rotX;
-                preY = rotY;
-                preZ = rotZ;
                 break;
             case true:
+                if (rotX != preX) ;
+                var delta = rotX - preX;
+                transform.eulerAngles += new Vector3(0, delta, 0);
+                /*
                 var rotDeltaX = Mathf.Abs(rotX - defRotX);
                 if (rotDeltaX > range.x)
                 {
@@ -78,7 +83,7 @@ public class TestGyiroSerial : MonoBehaviour
                             break;
                     }
                 }
-                /*
+                
                 var rotDeltaX = Mathf.Abs(rotX - preX);
                 if (rotDeltaX > range.x)
                 {
@@ -119,6 +124,10 @@ public class TestGyiroSerial : MonoBehaviour
 
                 break;
         }
+        preX = rotX;
+        preY = rotY;
+        preZ = rotZ;
+        
     }
 
     float Map(float value, float start1, float stop1, float start2, float stop2)
