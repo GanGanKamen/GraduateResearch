@@ -8,8 +8,6 @@ namespace Interface
 {
     public class SerialHandler : MonoBehaviour
     {
-        public delegate void SerialDataReceivedEventHandler(string message);
-        public event SerialDataReceivedEventHandler OnDataReceived;
         public string portName = "";
         public int baudRate = 115200;
 
@@ -17,10 +15,14 @@ namespace Interface
         public SerialPort serialPort;
         private Thread thread;
         private bool isRunning = false;
-        private string message;
+        [SerializeField]private string message;
         private bool isMessageReceived  = false;
 
-        
+        private void Start()
+        {
+            Close();
+            Open();
+        }
 
         // Update is called once per frame
         void Update()
@@ -66,6 +68,7 @@ namespace Interface
                 {
                     message = serialPort.ReadLine();
                     isMessageReceived = true;
+                    Debug.Log(message);
                 }
                 catch (System.Exception e)
                 {
@@ -79,6 +82,28 @@ namespace Interface
             try
             {
                 serialPort.Write(msg);
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning(e.Message);
+            }
+        }
+
+        void OnDestroy()
+        {
+            Debug.LogWarning("OnDestroy");
+            Close();
+        }
+
+        void OnDataReceived(string message)
+        {
+            Debug.LogWarning("OnDataReceived1");
+            var data = message.Split(
+                    new string[] { "\t" }, System.StringSplitOptions.None);
+            if (data.Length < 2) return;
+
+            try
+            {
             }
             catch (System.Exception e)
             {
