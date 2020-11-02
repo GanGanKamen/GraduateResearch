@@ -13,10 +13,14 @@ public class TestGyiroSerial : MonoBehaviour
 
     private float count = 0;
     private bool isInit = false;
+
+     private List<float> datas;
+    [SerializeField] private float defaultInput; 
     void Start()
     {
         paramaters = new float[6];
         preParas = new float[6];
+        datas = new List<float>();
     }
 
     // Update is called once per frame
@@ -26,11 +30,20 @@ public class TestGyiroSerial : MonoBehaviour
         if (isInit == false)
         {
             count += Time.deltaTime;
+            var data = input;
+            datas.Add(data);
             if (count >= 2)
             {
                 count = 0;
                 isInit = true;
+                float all = 0;
+                for(int i = 0; i < datas.Count; i++)
+                {
+                    all += datas[i];
+                }
+                defaultInput = all / datas.Count;
             }
+
         }
         else
         {
