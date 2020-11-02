@@ -8,22 +8,25 @@ namespace Primitive
     {
         [SerializeField] private AiManager frontEnemy;
         [SerializeField] private float period;
-
+        [SerializeField] private float waitTime;
         private MainPlayer player;
         [SerializeField]private List<AiManager> enemys;
         [SerializeField] private float timer = 0;
 
+        private bool isWait = false;
         // Start is called before the first frame update
         void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
             EnemysInit();
+            if (waitTime > 0) isWait = true;
         }
 
         // Update is called once per frame
         void Update()
         {
             timer += Time.deltaTime;
+            Wait();
             EnemysUpdate();
         }
 
@@ -53,12 +56,24 @@ namespace Primitive
             }
         }
 
+        private void Wait()
+        {
+            if (isWait)
+            {
+                if(timer >= waitTime)
+                {
+                    isWait = false;
+                }
+            }
+        }
+
         private void EnemysUpdate()
         {
+            if (isWait) return;
             for(int i = 0; i < enemys.Count; i++)
             {
                 enemys[i].StatusUpdate();
-                if(timer >= period * i)
+                if(timer - waitTime >= period * i)
                 {
                     if(enemys[i].IsAttack == false)
                     enemys[i].ToAttack();
