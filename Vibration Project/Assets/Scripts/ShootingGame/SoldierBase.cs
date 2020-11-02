@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Attack;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,14 @@ namespace Shooting
         Player,
         Enemy
     }
+
+    public enum BulletMethod 
+    {
+        Bullet,
+        Lay,
+        Direct
+    }
+
 
     public class SoldierBase : MonoBehaviour
     {
@@ -34,15 +43,17 @@ namespace Shooting
         [SerializeField] private GameObject fireEffect;
         [SerializeField] private GameObject deadPrefab;
         [SerializeField] private HitManager hitManager;
+        [SerializeField] private BulletMethod _bulletMethod;
         private int hp = 100;
         private Character character;
         private bool isShoot = false;
         private float shootCoolDownCount = 0;
 
-        public void Init(Character _character)
+        public void Init(Character _character,BulletMethod bulletMethod)
         {
             hp = maxHp;
             character = _character;
+            _bulletMethod = bulletMethod;
         }
 
         public void CharacterMove(Vector3 _direction)
@@ -134,9 +145,21 @@ namespace Shooting
             if (shootCoolDownCount >= shootCoolDownTime)
             {
                 shootCoolDownCount = 0;
-                GameObject bulletObj = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
-                bulletObj.GetComponent<BulletMain>().Init(hitPoint.position, bulletSpeed, this);
-                //bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this);
+                switch (_bulletMethod)
+                {
+                    case BulletMethod.Bullet:
+                        GameObject bulletObj = Instantiate(bulletPrefab, muzzle.position, Quaternion.identity);
+                        bulletObj.GetComponent<BulletMain>().Init(hitPoint.position, bulletSpeed, this);
+                        //bulletObj.GetComponent<Bullet>().Init(hitPoint.position, bulletSpeed, this);
+                        break;
+                    case BulletMethod.Direct:
+                        var player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
+                        player.GetDamege(transform);
+                        break;
+                    case BulletMethod.Lay:
+                        break;
+                }
+                
                 if (fireEffect.activeSelf == false) fireEffect.SetActive(true);
             }
             else

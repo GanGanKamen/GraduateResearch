@@ -19,7 +19,7 @@ public class MainPlayer : MonoBehaviour
 
     public Vector3 FrontVec { get { return CharacterVec(); } }
     public bool Dead { get { return _dead; } }
-
+    public bool IsPostPro = false;
 
     private HitPoint[] hitPoints;
     private bool _dead = false;
@@ -30,14 +30,14 @@ public class MainPlayer : MonoBehaviour
         animator = GetComponent<Animator>();
         HitPointsInit();
         hitManager.Init(this);
-        postManager.Init(hp);
+        if(IsPostPro) postManager.Init(hp);
     }
 
     // Update is called once per frame
     void Update()
     {
         hitManager.HitMarkUpdate();
-        postManager.PostUpdate();
+        if (IsPostPro) postManager.PostUpdate();
         KeyCtrl();
     }
 
@@ -54,8 +54,11 @@ public class MainPlayer : MonoBehaviour
         {
             if (hp > 0) hp -= 1;
             hitManager.GetDamege(target, HP_Status.Pinch);
-            if (postManager.IsPost == false) postManager.PostON();
-            postManager.GetPostAction(PostManager.Action.Down);
+            if (IsPostPro)
+            {
+                if (postManager.IsPost == false) postManager.PostON();
+                postManager.GetPostAction(PostManager.Action.Down);
+            }
             if (hp <= 0 && _dead == false)
             {
                 hp = 0;

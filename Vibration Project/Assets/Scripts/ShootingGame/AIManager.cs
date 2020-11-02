@@ -63,7 +63,7 @@ namespace Shooting
             status = AIStatus.Approach;
             target = GameObject.FindGameObjectWithTag("Player").transform;
             iK.SetError(_enemyPoint.aimErrorHorizon, _enemyPoint.aimErrorHight);
-            Init(Character.Enemy);
+            Init(Character.Enemy, BulletMethod.Bullet);
         }
 
         public void Run()
