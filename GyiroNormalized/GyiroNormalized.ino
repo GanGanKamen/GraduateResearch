@@ -61,4 +61,6 @@ void loop() {
   Serial.print(roll);  Serial.print(",");
   Serial.print(pitch);  Serial.print(",");
   Serial.print(yaw);  Serial.println(",");
+
+  delay(1000);
 }

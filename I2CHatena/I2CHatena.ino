@@ -5,7 +5,8 @@
 #define MPU6050_PWR_MGMT_1   0x6B  // Read and Write
 #define MPU_ADDRESS  0x68
 
-
+float gyo_y_Max = 250.13;
+float gyo_y_min = -250.14;
 // デバイス初期化時に実行される
 void setup() {
   Wire.begin();
@@ -54,13 +55,27 @@ void loop() {
   float gyro_y = gyRaw / 131.0;
   float gyro_z = gzRaw / 131.0;
 
+/*
   Serial.print(acc_x);  Serial.print(",");
   Serial.print(acc_y);  Serial.print(",");
   Serial.print(acc_z);  Serial.print(",");
   Serial.print(gyro_x); Serial.print(",");
   Serial.print(gyro_y); Serial.print(",");
   Serial.print(gyro_z); Serial.println("");
-  
-  //if(gyro_y > 10) {Serial.println('z');}
-  //if(gyro_y < -10) {Serial.println('x');}
-}
+*/
+
+Serial.println(gyro_y);
+
+/*
+ if(gyro_y > gyo_y_Max){
+  gyo_y_Max = gyro_y;
+  Serial.print("gyo_y_Max  "); Serial.println(gyo_y_Max);
+ }
+
+ if(gyro_y < gyo_y_min)
+ {
+  gyo_y_min = gyro_y;
+  Serial.print("gyo_y_min  "); Serial.println(gyo_y_min);
+  }
+ */ 
+ }
