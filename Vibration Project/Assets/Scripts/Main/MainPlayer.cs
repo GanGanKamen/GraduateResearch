@@ -13,32 +13,38 @@ public class MainPlayer : MonoBehaviour
     [SerializeField] private int hitPointEndruance;
     [SerializeField] private float bloodRecoveryTime;
     [SerializeField] private int armorShield;
-    [Header("Manager")]
-    [SerializeField] private HitManager hitManager;
-    [SerializeField] private PostManager postManager;
+    
+    //[Header("Manager")]
+    //[SerializeField] private HitManager hitManager;
+   // [SerializeField] private PostManager postManager;
 
     public Vector3 FrontVec { get { return CharacterVec(); } }
     public bool Dead { get { return _dead; } }
-    public bool IsPostPro = false;
 
     private HitPoint[] hitPoints;
     private bool _dead = false;
-    private Animator animator;
+
+    private bool _isInit = false;
     // Start is called before the first frame update
     void Start()
     {
-        animator = GetComponent<Animator>();
-        HitPointsInit();
-        hitManager.Init(this);
-        if(IsPostPro) postManager.Init(hp);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        hitManager.HitMarkUpdate();
-        if (IsPostPro) postManager.PostUpdate();
-        KeyCtrl();
+        if (_isInit)
+        {
+            KeyCtrl();
+        }
+
+    }
+
+    public void Init()
+    {
+        HitPointsInit();
+        _isInit = true;
     }
 
     public void GetDamege(Transform target)
@@ -47,18 +53,14 @@ public class MainPlayer : MonoBehaviour
         if(armorShield > 0)
         {
             armorShield -= 1;
-            hitManager.GetDamege(target, HP_Status.Normal);
+            //hitManager.GetDamege(target, HP_Status.Normal);
             if (armorShield <= 0) armorShield = 0;
         }
         else
         {
             if (hp > 0) hp -= 1;
-            hitManager.GetDamege(target, HP_Status.Pinch);
-            if (IsPostPro)
-            {
-                if (postManager.IsPost == false) postManager.PostON();
-                postManager.GetPostAction(PostManager.Action.Down);
-            }
+            //hitManager.GetDamege(target, HP_Status.Pinch);
+
             if (hp <= 0 && _dead == false)
             {
                 hp = 0;
@@ -112,6 +114,5 @@ public class MainPlayer : MonoBehaviour
     {
         _dead = true;
         hp = 0;
-        animator.SetBool("die", true);
     }
 }
