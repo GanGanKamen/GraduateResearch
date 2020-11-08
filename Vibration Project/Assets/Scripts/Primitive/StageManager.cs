@@ -14,20 +14,31 @@ namespace Primitive
         [SerializeField] private float timer = 0;
 
         private bool isWait = false;
+        private bool isStart = false;
         // Start is called before the first frame update
         void Start()
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
-            EnemysInit();
-            if (waitTime > 0) isWait = true;
+           
         }
 
         // Update is called once per frame
         void Update()
         {
-            timer += Time.deltaTime;
-            Wait();
-            EnemysUpdate();
+            if (isStart)
+            {
+                timer += Time.deltaTime;
+                Wait();
+                EnemysUpdate();
+            }
+
+        }
+
+        public void Init()
+        {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
+            EnemysInit();
+            if (waitTime > 0) isWait = true;
+            isStart = true;
         }
 
         private void EnemysInit()

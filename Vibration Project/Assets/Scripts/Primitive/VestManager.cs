@@ -13,27 +13,38 @@ public enum HitDirection
 
 public class VestManager : MonoBehaviour
 {
-    public bool IsFrontBlood { get { return _isFrontBlood; } }
-    public bool IsLeftBlood { get { return _isLeftBlood; } }
-    public bool IsRightBlood { get { return _isRightBlood; } }
-    public bool IsBackBlood { get { return _isBackBlood; } }
-
-    private bool _isFrontBlood = false;
-    private bool _isLeftBlood = false;
-    private bool _isRightBlood = false;
-    private bool _isBackBlood = false;
-
+    public float GyiroInput { get { return _gyioInput; } }
+    public bool HasSetGyiro { get { return isSetDefultValue; } }
+    public const float gyo_y_Max = 250.13f;
+    public const float gyo_y_Min = -250.14f;
+    [SerializeField] private float oneHitTime;
+    [SerializeField] private float errorValue;
+    private HitParts[] hitparts;
     private SerialPortUtility.SerialPortUtilityPro SerialPort;
+    private float paramater;
+    private float _gyioInput = 0;
+    private float defultValue = 0;
+    private bool isSetDefultValue = false;
+    private float initCount = 0;
+    private List<float> initParamater;
+    private bool isInit = false;
     // Update is called once per frame
     void Update()
     {
-        
+        SetGyiroUpdate();
     }
 
     public void Init()
     {
         SerialPort = GetComponent<SerialPortUtility.SerialPortUtilityPro>();
+        HitPartsInit();
         SerialPort.Open();
+        isInit = true;
+    }
+
+    public void GyiroInit()
+    {
+        isSetDefultValue = false;
     }
 
     public HitDirection AngleToHitDirection(float angle)
@@ -56,90 +67,203 @@ public class VestManager : MonoBehaviour
         else return HitDirection.Front;
     }
 
-    public void FrontBlood(bool StartOrStop)
+    public void StartBlood(HitDirection hitDirection)
     {
-        switch (StartOrStop)
+        switch (hitDirection)
         {
-            case true:
-                if (_isFrontBlood) return;
-                SerialPort.Write("a");
-                _isFrontBlood = true;
+            case HitDirection.Front:
+                hitparts[0].Heat(SerialPort, true);
                 break;
-            case false:
-                if (_isFrontBlood == false) return;
-                SerialPort.Write("a");
-                _isFrontBlood = false;
+            case HitDirection.Back:
+                hitparts[1].Heat(SerialPort, true);
+                break;
+            case HitDirection.Left:
+                hitparts[2].Heat(SerialPort, true);
+                break;
+            case HitDirection.Right:
+                hitparts[3].Heat(SerialPort, true);
+                break;
+            case HitDirection.Error:
                 break;
         }
     }
 
-    public void LeftBlood(bool StartOrStop)
+    public void StopBlood(HitDirection hitDirection)
     {
-        switch (StartOrStop)
+        switch (hitDirection)
         {
-            case true:
-                if (_isLeftBlood) return;
-                SerialPort.Write("a");
-                _isLeftBlood = true;
+            case HitDirection.Front:
+                hitparts[0].Heat(SerialPort, false);
                 break;
-            case false:
-                if (_isLeftBlood == false) return;
-                SerialPort.Write("a");
-                _isLeftBlood = false;
+            case HitDirection.Back:
+                hitparts[1].Heat(SerialPort, false);
+                break;
+            case HitDirection.Left:
+                hitparts[2].Heat(SerialPort, false);
+                break;
+            case HitDirection.Right:
+                hitparts[3].Heat(SerialPort, false);
+                break;
+            case HitDirection.Error:
                 break;
         }
     }
 
-    public void RightBlood(bool StartOrStop)
+    public void StartHit(HitDirection hitDirection)
     {
-        switch (StartOrStop)
+        switch (hitDirection)
         {
-            case true:
-                if (_isRightBlood) return;
-                SerialPort.Write("a");
-                _isRightBlood = true;
+            case HitDirection.Front:
+                hitparts[0].Vibrate(SerialPort, true);
                 break;
-            case false:
-                if (_isRightBlood == false) return;
-                SerialPort.Write("a");
-                _isRightBlood = false;
+            case HitDirection.Back:
+                hitparts[1].Vibrate(SerialPort, true);
+                break;
+            case HitDirection.Left:
+                hitparts[2].Vibrate(SerialPort, true);
+                break;
+            case HitDirection.Right:
+                hitparts[3].Vibrate(SerialPort, true);
+                break;
+            case HitDirection.Error:
                 break;
         }
     }
 
-    public void BackBlood(bool StartOrStop)
+    public void StopHit(HitDirection hitDirection)
     {
-        switch (StartOrStop)
+        switch (hitDirection)
         {
-            case true:
-                if (_isBackBlood) return;
-                SerialPort.Write("a");
-                _isBackBlood = true;
+            case HitDirection.Front:
+                hitparts[0].Vibrate(SerialPort, false);
                 break;
-            case false:
-                if (_isBackBlood == false) return;
-                SerialPort.Write("a");
-                _isBackBlood = false;
+            case HitDirection.Back:
+                hitparts[1].Vibrate(SerialPort, false);
                 break;
+            case HitDirection.Left:
+                hitparts[2].Vibrate(SerialPort, false);
+                break;
+            case HitDirection.Right:
+                hitparts[3].Vibrate(SerialPort, false);
+                break;
+            case HitDirection.Error:
+                break;
+        }
+    }
+
+    public void OneHit(HitDirection HitDirection)
+    {
+        var targetNum = 0;
+        for (int i = 0; i < hitparts.Length; i++)
+        {
+            if (hitparts[i].HitDirection == HitDirection)
+            {
+                targetNum = i;
+                break;
+            }
+        }
+        if (hitparts[targetNum].IsVibrate) return;
+        StartCoroutine(VibrateCourtine(HitDirection));
+    }
+
+    public void ReadComplateString(object data)
+    {
+
+        var text = data as string;
+        string[] arr = text.Split(',');
+
+        if (arr.Length < 1) return;
+        var canPerse = float.TryParse(arr[0], out paramater);
+        if (canPerse) paramater = float.Parse(arr[0]);
+        if (paramater > gyo_y_Max) paramater = gyo_y_Max;
+        if (paramater < gyo_y_Min) paramater = gyo_y_Min;
+        var val = paramater;
+
+        if (isSetDefultValue == false)
+        {
+            initParamater.Add(val);
+        }
+
+        else
+        {
+            if (paramater > defultValue + errorValue ||
+                paramater < defultValue - errorValue)
+            {
+                float result = 0;
+                bool dir = paramater > defultValue;
+                switch (dir)
+                {
+                    case true:
+                        result = Map(paramater, defultValue + errorValue, gyo_y_Max, 0, 1);
+                        break;
+                    case false:
+                        result = Map(paramater, gyo_y_Min, defultValue - errorValue, -1, 0);
+                        break;
+                }
+
+                _gyioInput = result;
+            }
+            else
+            {
+                _gyioInput = 0;
+            }
+        }
+    }
+
+    private void HitPartsInit()
+    {
+        hitparts = new HitParts[4];
+        for(int i = 0; i < 4; i++)
+        {
+            hitparts[0] = new HitParts(HitDirection.Front, "", "", "", "");
+            hitparts[1] = new HitParts(HitDirection.Back, "", "", "", "");
+            hitparts[2] = new HitParts(HitDirection.Left, "", "", "", "");
+            hitparts[3] = new HitParts(HitDirection.Right, "", "", "", "");
+        }
+    }
+
+    private void SetGyiroUpdate()
+    {
+        if (isInit == false) return;
+        if (isSetDefultValue == false)
+        {
+            initCount += Time.deltaTime;
+            if (initCount >= 5)
+            {
+                initCount = 0;
+                float defultValueCount = 0;
+                for (int i = 0; i < initParamater.Count; i++)
+                {
+                    defultValueCount += initParamater[i];
+                }
+                defultValue = defultValueCount / initParamater.Count;
+                Debug.Log(defultValue);
+                isSetDefultValue = true;
+            }
         }
     }
 
     private IEnumerator VibrateCourtine(HitDirection HitDirection)
     {
-        string startMessage = "";
-        string stopMessage = "";
-        switch (HitDirection)
+        var targetNum = 0;
+        for(int i = 0; i < hitparts.Length; i++)
         {
-            case HitDirection.Front:
-
+            if(hitparts[i].HitDirection == HitDirection)
+            {
+                targetNum = i;
                 break;
-            case HitDirection.Back:
-                break;
-            case HitDirection.Left:
-                break;
-            case HitDirection.Right:
-                break;
+            }
         }
+        Debug.Log("targetNum = " + targetNum);
+        if (hitparts[targetNum].IsVibrate) yield break;
+        hitparts[targetNum].Vibrate(SerialPort, true);
+        yield return new WaitForSeconds(oneHitTime);
+        hitparts[targetNum].Vibrate(SerialPort, false);
         yield break;
+    }
+
+    float Map(float value, float start1, float stop1, float start2, float stop2)
+    {
+        return start2 + (stop2 - start2) * ((value - start1) / (stop1 - start1));
     }
 }

@@ -5,6 +5,7 @@ using SerialPortUtility;
 
 public class HitParts
 {
+    public HitDirection HitDirection { get { return _hitDirection; } }
     public bool IsHeat { get { return isHeat; } }
     public bool IsVibrate { get { return isVibrate; } }
 
