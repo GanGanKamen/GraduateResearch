@@ -25,25 +25,11 @@ public class MainPlayer : MonoBehaviour
     private bool _dead = false;
 
     private bool _isInit = false;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (_isInit)
-        {
-            KeyCtrl();
-        }
-
-    }
-
-    public void Init()
+    private Primitive.StageManager _stageManager;
+    public void Init(Primitive.StageManager stageManager)
     {
         HitPointsInit();
+        _stageManager = stageManager;
         _isInit = true;
     }
 
@@ -69,6 +55,16 @@ public class MainPlayer : MonoBehaviour
         }
     }
 
+
+    public void KeyCtrlTest()
+    {
+        if (_dead || _isInit == false) return;
+        if (Input.GetAxis("Horizontal") != 0)
+            transform.localEulerAngles +=
+                new Vector3(0, rotateSpeed * Time.deltaTime * Input.GetAxis("Horizontal"), 0);
+
+    }
+
     private void HitPointsInit()
     {
         var hitpointsList = new List<HitPoint>();
@@ -86,17 +82,7 @@ public class MainPlayer : MonoBehaviour
         var pos1 = front.position;
         return (pos1 - pos0).normalized;
     }
-
-    private void KeyCtrl()
-    {
-        if (_dead) return;
-        if (Input.GetAxis("Horizontal") != 0)
-            transform.localEulerAngles += 
-                new Vector3(0, rotateSpeed * Time.deltaTime* Input.GetAxis("Horizontal"), 0);
-
-    }
-
-    
+ 
 
     private int GetHitPointNumber(float angle)
     {

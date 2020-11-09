@@ -20,7 +20,7 @@ public class VestManager : MonoBehaviour
     [SerializeField] private float oneHitTime;
     [SerializeField] private float errorValue;
     private HitParts[] hitparts;
-    private SerialPortUtility.SerialPortUtilityPro SerialPort;
+    [HideInInspector]public SerialPortUtility.SerialPortUtilityPro SerialPort;
     private float paramater;
     private float _gyioInput = 0;
     private float defultValue = 0;

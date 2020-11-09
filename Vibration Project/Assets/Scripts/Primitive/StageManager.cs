@@ -4,21 +4,39 @@ using UnityEngine;
 
 namespace Primitive
 {
+    public enum StageMode
+    {
+        None,
+        Vib,
+        VibHeat
+    }
+
     public class StageManager : MonoBehaviour
     {
+        [SerializeField] private StageMode mode;
         [SerializeField] private AiManager frontEnemy;
         [SerializeField] private float period;
         [SerializeField] private float waitTime;
+        [SerializeField] private GameObject[] enemysOnStage;
         private MainPlayer player;
-        [SerializeField]private List<AiManager> enemys;
-        [SerializeField] private float timer = 0;
+        private List<AiManager> enemys;
+        private float timer = 0;
 
         private bool isWait = false;
         private bool isStart = false;
+        private VestManager vestManager;
         // Start is called before the first frame update
         void Start()
         {
-           
+            switch (mode)
+            {
+                case StageMode.None:
+                    Init();
+                    break;
+                default:
+                    StartCoroutine(VestInit());
+                    break;
+            }
         }
 
         // Update is called once per frame
@@ -29,22 +47,62 @@ namespace Primitive
                 timer += Time.deltaTime;
                 Wait();
                 EnemysUpdate();
+                PlayerUpdate();
             }
-
         }
 
         public void Init()
         {
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
+            player.Init(this);
             EnemysInit();
             if (waitTime > 0) isWait = true;
             isStart = true;
         }
 
+        public void PlayGetDamage(Transform target)
+        {
+            var targetPos = new Vector2(target.position.x, target.position.z);
+            var playerPos = new Vector2(player.transform.position.x,
+                player.transform.position.z);
+            float dx = targetPos.x - playerPos.x;
+            float dy = targetPos.y - playerPos.y;
+            float rad = Mathf.Atan2(dy, dx);
+            var angle = rad * Mathf.Rad2Deg + player.transform.eulerAngles.y - 90f;
+            switch (mode)
+            {
+                case StageMode.None:
+                    break;
+                case StageMode.Vib:
+                    break;
+                case StageMode.VibHeat:
+                    break;
+            }
+        }
+
+        private IEnumerator VestInit()
+        {
+            vestManager = GameObject.Find("Vestmanager").GetComponent<VestManager>();
+            vestManager.Init();
+            if(mode == StageMode.VibHeat)
+            {
+                vestManager.SerialPort.ReadCompleteEventObject.AddListener(vestManager.ReadComplateString);
+            }
+            while(vestManager.HasSetGyiro == false)
+            {
+                yield return null;
+            }
+            Init();
+        }
+
         private void EnemysInit()
         {
+            for (int i = 0; i < enemysOnStage.Length; i++)
+            {
+                enemysOnStage[i].SetActive(true);
+            }
             var epList = new List<AiManager>();
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Enemy"))
+            foreach (GameObject obj in enemysOnStage)
             {
                 var ep = obj.GetComponent<AiManager>();
                 if (ep != frontEnemy) epList.Add(ep);
@@ -89,6 +147,18 @@ namespace Primitive
                     if(enemys[i].IsAttack == false)
                     enemys[i].ToAttack();
                 }
+            }
+        }
+
+        private void PlayerUpdate()
+        {
+            switch (mode)
+            {
+                case StageMode.None:
+                    player.KeyCtrlTest();
+                    break;
+                default:
+                    break;
             }
         }
 
