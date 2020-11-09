@@ -84,7 +84,7 @@ void GetSerial() {
 		switch (cmd) {
 
 		case'a':  
-			ON(13);
+			ON(13); //Back 
 			break;
 		case'b':  
 			OFF(13);
@@ -95,7 +95,7 @@ void GetSerial() {
 		case'd':
 			OFF(12);
 			break;
-		case'e':
+		case'e': //Left
 			ON(11);
 			break;
 		case'f':
@@ -107,7 +107,7 @@ void GetSerial() {
 		case'h':
 			OFF(10);
 			break;
-		case'i':
+		case'i': //Right
 			ON(9);
 			break;
 		case'j':
@@ -119,7 +119,7 @@ void GetSerial() {
 		case'l':
 			OFF(8);
 			break;
-		case'm':
+		case'm': //Front
 			ON(7);
 			break;
 		case'n':
