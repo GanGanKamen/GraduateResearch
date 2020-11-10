@@ -18,6 +18,7 @@ namespace Primitive
         [SerializeField] private float period;
         [SerializeField] private float waitTime;
         [SerializeField] private GameObject[] enemysOnStage;
+        [SerializeField] private HitManager hitManager;
         private MainPlayer player;
         private List<AiManager> enemys;
         private float timer = 0;
@@ -32,6 +33,7 @@ namespace Primitive
             {
                 case StageMode.None:
                     Init();
+                    hitManager.Init(player);
                     break;
                 default:
                     StartCoroutine(VestInit());
@@ -72,6 +74,7 @@ namespace Primitive
             switch (mode)
             {
                 case StageMode.None:
+                    hitManager.GetDamege(target, HP_Status.Pinch);
                     break;
                 case StageMode.Vib:
                     break;

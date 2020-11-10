@@ -39,14 +39,12 @@ public class MainPlayer : MonoBehaviour
         if(armorShield > 0)
         {
             armorShield -= 1;
-            //hitManager.GetDamege(target, HP_Status.Normal);
             if (armorShield <= 0) armorShield = 0;
         }
         else
         {
             if (hp > 0) hp -= 1;
-            //hitManager.GetDamege(target, HP_Status.Pinch);
-
+            _stageManager.PlayGetDamage(target);
             if (hp <= 0 && _dead == false)
             {
                 hp = 0;
@@ -100,5 +98,6 @@ public class MainPlayer : MonoBehaviour
     {
         _dead = true;
         hp = 0;
+        Fader.FadeInBlack(2, "Dead");
     }
 }
