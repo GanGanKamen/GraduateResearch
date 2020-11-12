@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class MainPlayer : MonoBehaviour
 {
+    public Transform Body { get { return _body; } }
     [Header("Defult")]
     [SerializeField] private Transform front;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private Transform _body;
     [Header("Paramater")]
     [SerializeField] private float hp;
     [SerializeField] private float rotateSpeed;
@@ -63,6 +65,12 @@ public class MainPlayer : MonoBehaviour
 
     }
 
+    public void BodyRotate(float input)
+    {
+        if (_dead || _isInit == false) return;
+        _body.localEulerAngles -= new Vector3(0, rotateSpeed * Time.deltaTime * input, 0);
+    }
+
     private void HitPointsInit()
     {
         var hitpointsList = new List<HitPoint>();
@@ -98,6 +106,6 @@ public class MainPlayer : MonoBehaviour
     {
         _dead = true;
         hp = 0;
-        Fader.FadeInBlack(2, "Dead");
+        _stageManager.PlayerDie();
     }
 }

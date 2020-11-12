@@ -65,22 +65,34 @@ namespace Primitive
         public void PlayGetDamage(Transform target)
         {
             var targetPos = new Vector2(target.position.x, target.position.z);
-            var playerPos = new Vector2(player.transform.position.x,
-                player.transform.position.z);
+            var playerPos = new Vector2(player.Body.position.x,
+                player.Body.position.z);
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
             float rad = Mathf.Atan2(dy, dx);
-            var angle = rad * Mathf.Rad2Deg + player.transform.eulerAngles.y - 90f;
+            var angle = rad * Mathf.Rad2Deg + player.Body.eulerAngles.y - 90f;
             switch (mode)
             {
                 case StageMode.None:
                     hitManager.GetDamege(target, HP_Status.Pinch);
                     break;
                 case StageMode.Vib:
+                    var dir = vestManager.AngleToHitDirection(angle);
+                    vestManager.OneHit(dir);
                     break;
                 case StageMode.VibHeat:
+                    var dir0 = vestManager.AngleToHitDirection(angle);
+                    vestManager.OneHit(dir0);
                     break;
             }
+        }
+
+        public void PlayerDie()
+        {
+            vestManager.StopAllBlood();
+            vestManager.StopAllHit();
+            vestManager.SerialPort.Close();
+            Fader.FadeInBlack(2, "Dead");
         }
 
         private IEnumerator VestInit()
@@ -161,6 +173,7 @@ namespace Primitive
                     player.KeyCtrlTest();
                     break;
                 default:
+                    player.BodyRotate(vestManager.GyiroInput);
                     break;
             }
         }

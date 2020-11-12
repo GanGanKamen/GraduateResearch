@@ -210,6 +210,22 @@ public class VestManager : MonoBehaviour
         }
     }
 
+    public void StopAllBlood()
+    {
+        for(int i = 0; i < hitparts.Length; i++)
+        {
+            hitparts[i].Heat(SerialPort, false);
+        }
+    }
+
+    public void StopAllHit()
+    {
+        for (int i = 0; i < hitparts.Length; i++)
+        {
+            hitparts[i].Vibrate(SerialPort, false);
+        }
+    }
+
     private void HitPartsInit()
     {
         hitparts = new HitParts[4];
