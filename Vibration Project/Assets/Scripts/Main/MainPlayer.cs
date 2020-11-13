@@ -59,10 +59,10 @@ public class MainPlayer : MonoBehaviour
     public void KeyCtrlTest()
     {
         if (_dead || _isInit == false) return;
-        if (Input.GetAxis("Horizontal") != 0)
+        if (Input.GetAxis("Horizontal") != 0|| Input.GetAxis("Vertical") != 0)
             transform.localEulerAngles +=
-                new Vector3(0, rotateSpeed * Time.deltaTime * Input.GetAxis("Horizontal"), 0);
-
+                new Vector3(rotateSpeed * Time.deltaTime * Input.GetAxis("Vertical"), 
+                rotateSpeed * Time.deltaTime * Input.GetAxis("Horizontal"), 0);
     }
 
     public void BodyRotate(float input)

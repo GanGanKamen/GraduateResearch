@@ -89,15 +89,23 @@ namespace Primitive
 
         public void PlayerDie()
         {
-            vestManager.StopAllBlood();
-            vestManager.StopAllHit();
-            vestManager.SerialPort.Close();
+            for(int i = 0; i < enemys.Count; i++)
+            {
+                enemys[i].AttackCancel();
+            }
+            if(vestManager != null)
+            {
+                vestManager.StopAllBlood();
+                vestManager.StopAllHit();
+                vestManager.SerialPort.Close();
+            }
+
             Fader.FadeInBlack(2, "Dead");
         }
 
         private IEnumerator VestInit()
         {
-            vestManager = GameObject.Find("Vestmanager").GetComponent<VestManager>();
+            vestManager = GameObject.Find("VestManager").GetComponent<VestManager>();
             vestManager.Init();
             if(mode == StageMode.VibHeat)
             {

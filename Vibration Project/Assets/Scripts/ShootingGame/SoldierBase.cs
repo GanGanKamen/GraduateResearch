@@ -155,6 +155,8 @@ namespace Shooting
                     case BulletMethod.Direct:
                         var player = GameObject.FindGameObjectWithTag("Player").GetComponent<MainPlayer>();
                         player.GetDamege(transform);
+                        var audio = GetComponent<AudioSource>();
+                        audio.PlayOneShot(audio.clip);
                         break;
                     case BulletMethod.Lay:
                         break;
