@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TestGyiroAngle : MonoBehaviour
 {
+    [SerializeField] private SerialPortUtility.SerialPortUtilityPro serialPort;
     [SerializeField] private Transform target;
     [SerializeField] private float speed;
     [SerializeField] private UnityEngine.UI.Text paramaterText;
@@ -22,6 +23,7 @@ public class TestGyiroAngle : MonoBehaviour
     void Start()
     {
         initParamater = new List<float>();
+        serialPort.Open();
     }
 
     // Update is called once per frame

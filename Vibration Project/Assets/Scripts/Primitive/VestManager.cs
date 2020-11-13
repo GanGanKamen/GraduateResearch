@@ -20,7 +20,7 @@ public class VestManager : MonoBehaviour
     [SerializeField] private float oneHitTime;
     [SerializeField] private float errorValue;
     private HitParts[] hitparts;
-    [HideInInspector]public SerialPortUtility.SerialPortUtilityPro SerialPort;
+    public SerialPortUtility.SerialPortUtilityPro SerialPort;
     private float paramater;
     private float _gyioInput = 0;
     private float defultValue = 0;
@@ -36,10 +36,10 @@ public class VestManager : MonoBehaviour
 
     public void Init()
     {
-        SerialPort = GetComponent<SerialPortUtility.SerialPortUtilityPro>();
         HitPartsInit();
         SerialPort.Open();
         isInit = true;
+        initParamater = new List<float>();
     }
 
     public void GyiroInit()
@@ -178,7 +178,6 @@ public class VestManager : MonoBehaviour
         if (paramater > gyo_y_Max) paramater = gyo_y_Max;
         if (paramater < gyo_y_Min) paramater = gyo_y_Min;
         var val = paramater;
-
         if (isSetDefultValue == false)
         {
             initParamater.Add(val);
@@ -231,10 +230,10 @@ public class VestManager : MonoBehaviour
         hitparts = new HitParts[4];
         for(int i = 0; i < 4; i++)
         {
-            hitparts[0] = new HitParts(HitDirection.Front, "", "", "", "");
-            hitparts[1] = new HitParts(HitDirection.Back, "", "", "", "");
-            hitparts[2] = new HitParts(HitDirection.Left, "", "", "", "");
-            hitparts[3] = new HitParts(HitDirection.Right, "", "", "", "");
+            hitparts[0] = new HitParts(HitDirection.Front, "o", "p", "m", "n");
+            hitparts[1] = new HitParts(HitDirection.Back, "c", "d", "a", "b");
+            hitparts[2] = new HitParts(HitDirection.Left, "g", "h", "e", "f");
+            hitparts[3] = new HitParts(HitDirection.Right, "k", "l", "i", "j");
         }
     }
 

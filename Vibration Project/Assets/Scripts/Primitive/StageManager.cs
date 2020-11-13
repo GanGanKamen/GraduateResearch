@@ -70,7 +70,8 @@ namespace Primitive
             float dx = targetPos.x - playerPos.x;
             float dy = targetPos.y - playerPos.y;
             float rad = Mathf.Atan2(dy, dx);
-            var angle = rad * Mathf.Rad2Deg + player.Body.eulerAngles.y - 90f;
+            var angle = rad * Mathf.Rad2Deg + player.Body.eulerAngles.y;
+            Debug.Log(angle);
             switch (mode)
             {
                 case StageMode.None:
@@ -83,6 +84,7 @@ namespace Primitive
                 case StageMode.VibHeat:
                     var dir0 = vestManager.AngleToHitDirection(angle);
                     vestManager.OneHit(dir0);
+                    vestManager.StartBlood(dir0);
                     break;
             }
         }
@@ -97,7 +99,7 @@ namespace Primitive
             {
                 vestManager.StopAllBlood();
                 vestManager.StopAllHit();
-                vestManager.SerialPort.Close();
+                //vestManager.SerialPort.Close();
             }
 
             Fader.FadeInBlack(2, "Dead");
@@ -107,10 +109,6 @@ namespace Primitive
         {
             vestManager = GameObject.Find("VestManager").GetComponent<VestManager>();
             vestManager.Init();
-            if(mode == StageMode.VibHeat)
-            {
-                vestManager.SerialPort.ReadCompleteEventObject.AddListener(vestManager.ReadComplateString);
-            }
             while(vestManager.HasSetGyiro == false)
             {
                 yield return null;
