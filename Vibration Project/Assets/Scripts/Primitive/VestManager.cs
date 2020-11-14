@@ -14,7 +14,9 @@ public enum HitDirection
 public class VestManager : MonoBehaviour
 {
     public float GyiroInput { get { return _gyioInput; } }
+    public float Paramater { get { return paramater; } }
     public bool HasSetGyiro { get { return isSetDefultValue; } }
+    public HitParts[] DebugHitParts { get { return hitparts; } }
     public const float gyo_y_Max = 250.13f;
     public const float gyo_y_Min = -250.14f;
     [SerializeField] private float oneHitTime;
@@ -22,7 +24,7 @@ public class VestManager : MonoBehaviour
     private HitParts[] hitparts;
     public SerialPortUtility.SerialPortUtilityPro SerialPort;
     private float paramater;
-    private float _gyioInput = 0;
+    [SerializeField]private float _gyioInput = 0;
     private float defultValue = 0;
     private bool isSetDefultValue = false;
     private float initCount = 0;
@@ -37,9 +39,10 @@ public class VestManager : MonoBehaviour
     public void Init()
     {
         HitPartsInit();
-        SerialPort.Open();
         isInit = true;
         initParamater = new List<float>();
+        SerialPort.Close();
+        SerialPort.Open();
     }
 
     public void GyiroInit()
@@ -199,7 +202,6 @@ public class VestManager : MonoBehaviour
                         result = Map(paramater, gyo_y_Min, defultValue - errorValue, -1, 0);
                         break;
                 }
-
                 _gyioInput = result;
             }
             else
@@ -213,14 +215,17 @@ public class VestManager : MonoBehaviour
     {
         for(int i = 0; i < hitparts.Length; i++)
         {
+            if(hitparts[i].IsHeat)
             hitparts[i].Heat(SerialPort, false);
         }
     }
 
     public void StopAllHit()
     {
+        StopAllCoroutines();
         for (int i = 0; i < hitparts.Length; i++)
         {
+            if(hitparts[i].IsVibrate)
             hitparts[i].Vibrate(SerialPort, false);
         }
     }
@@ -269,7 +274,6 @@ public class VestManager : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("targetNum = " + targetNum);
         if (hitparts[targetNum].IsVibrate) yield break;
         hitparts[targetNum].Vibrate(SerialPort, true);
         yield return new WaitForSeconds(oneHitTime);

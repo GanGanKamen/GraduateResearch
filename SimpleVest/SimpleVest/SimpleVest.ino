@@ -76,6 +76,7 @@ void SendSerial(){
   float gyro_z = gzRaw / 131.0;
 
  Serial.println(gyro_y);
+ Serial.flush();
 }
 
 void GetSerial() {

@@ -65,13 +65,12 @@ namespace Primitive
         public void PlayGetDamage(Transform target)
         {
             var targetPos = new Vector2(target.position.x, target.position.z);
-            var playerPos = new Vector2(player.Body.position.x,
-                player.Body.position.z);
-            float dx = targetPos.x - playerPos.x;
-            float dy = targetPos.y - playerPos.y;
-            float rad = Mathf.Atan2(dy, dx);
-            var angle = rad * Mathf.Rad2Deg + player.Body.eulerAngles.y;
-            Debug.Log(angle);
+            var playerPos = new Vector2(player.transform.position.x, player.transform.position.z);
+            var vec0 = player.FrontVec2D;
+            var vec1 = (targetPos - playerPos).normalized;
+            var angle = Vector2.Angle(vec0, vec1);
+            var cross = vec0.x * vec1.y - vec0.y * vec1.x;
+            if (cross > 0) angle = 360 -angle;
             switch (mode)
             {
                 case StageMode.None:
@@ -79,12 +78,14 @@ namespace Primitive
                     break;
                 case StageMode.Vib:
                     var dir = vestManager.AngleToHitDirection(angle);
-                    vestManager.OneHit(dir);
+                    vestManager.StopAllHit();
+                    vestManager.StartHit(dir);
                     break;
                 case StageMode.VibHeat:
                     var dir0 = vestManager.AngleToHitDirection(angle);
-                    vestManager.OneHit(dir0);
                     vestManager.StartBlood(dir0);
+                    vestManager.StopAllHit();
+                    vestManager.StartHit(dir0);
                     break;
             }
         }
@@ -99,7 +100,6 @@ namespace Primitive
             {
                 vestManager.StopAllBlood();
                 vestManager.StopAllHit();
-                //vestManager.SerialPort.Close();
             }
 
             Fader.FadeInBlack(2, "Dead");
@@ -159,7 +159,7 @@ namespace Primitive
 
         private void EnemysUpdate()
         {
-            if (isWait) return;
+            if (isWait || player.Dead) return;
             for(int i = 0; i < enemys.Count; i++)
             {
                 enemys[i].StatusUpdate();

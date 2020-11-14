@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class MainPlayer : MonoBehaviour
 {
@@ -20,7 +21,8 @@ public class MainPlayer : MonoBehaviour
     //[SerializeField] private HitManager hitManager;
    // [SerializeField] private PostManager postManager;
 
-    public Vector3 FrontVec { get { return CharacterVec(); } }
+    public Vector2 FrontVec2D { get { return Vec2D(); } }
+    public Vector3 FrontVec3D { get { return Vec3D(); } }
     public bool Dead { get { return _dead; } }
 
     private HitPoint[] hitPoints;
@@ -33,6 +35,7 @@ public class MainPlayer : MonoBehaviour
         HitPointsInit();
         _stageManager = stageManager;
         _isInit = true;
+
     }
 
     public void GetDamege(Transform target)
@@ -82,10 +85,17 @@ public class MainPlayer : MonoBehaviour
         hitPoints = hitpointsList.ToArray();
     }
 
-    private Vector3 CharacterVec()
+    private Vector3 Vec3D()
     {
         var pos0 = transform.position;
         var pos1 = front.position;
+        return (pos1 - pos0).normalized;
+    }
+
+    private Vector2 Vec2D()
+    {
+        var pos0 = new Vector2(transform.position.x,transform.position.z);
+        var pos1 = new Vector2(front.position.x, front.position.z);
         return (pos1 - pos0).normalized;
     }
  
