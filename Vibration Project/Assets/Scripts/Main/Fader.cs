@@ -30,9 +30,9 @@ public class Fader : MonoBehaviour
         faderBlack.GetComponent<FadeCanvas>().FadeOut(time);
     }
 
-    static public void FadeIn(float time,string sceneName)
+    static public void FadeIn(float time,string sceneName,bool destory)
     {
-        fader.GetComponent<FadeCanvas>().FadeIn(time,sceneName);
+        fader.GetComponent<FadeCanvas>().FadeIn(time,sceneName,destory);
     }
 
     static public void FadeIn(float time)
@@ -40,9 +40,9 @@ public class Fader : MonoBehaviour
         fader.GetComponent<FadeCanvas>().FadeIn(time);
     }
 
-    static public void FadeInBlack(float time, string sceneName)
+    static public void FadeInBlack(float time, string sceneName, bool destory)
     {
-        faderBlack.GetComponent<FadeCanvas>().FadeIn(time, sceneName);
+        faderBlack.GetComponent<FadeCanvas>().FadeIn(time, sceneName,destory);
     }
 
     static public void FadeInBlack(float time)

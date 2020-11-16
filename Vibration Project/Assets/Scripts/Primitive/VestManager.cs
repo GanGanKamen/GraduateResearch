@@ -169,6 +169,13 @@ public class VestManager : MonoBehaviour
         StartCoroutine(VibrateCourtine(HitDirection));
     }
 
+    public void DisConect()
+    {
+        StopAllBlood();
+        StopAllHit();
+        SerialPort.Write("z");
+    }
+
     public void ReadComplateString(object data)
     {
 

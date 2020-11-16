@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Primitive
 {
@@ -98,11 +99,10 @@ namespace Primitive
             }
             if(vestManager != null)
             {
-                vestManager.StopAllBlood();
-                vestManager.StopAllHit();
+                vestManager.DisConect();
             }
 
-            Fader.FadeInBlack(2, "Dead");
+            Fader.FadeInBlack(2, "Dead",true);
         }
 
         private IEnumerator VestInit()
@@ -201,6 +201,9 @@ namespace Primitive
             return result;
 
         }
+         
+
+
     }
 }
 

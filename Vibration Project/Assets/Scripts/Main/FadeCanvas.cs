@@ -19,7 +19,8 @@ public class FadeCanvas : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        var cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        GetComponent<Canvas>().worldCamera = cam;
     }
 
     // Update is called once per frame
@@ -60,9 +61,9 @@ public class FadeCanvas : MonoBehaviour
         StartCoroutine(StartFadeOut(time));
     }
 
-    public void FadeIn(float time,string sceneName)
+    public void FadeIn(float time,string sceneName,bool destory)
     {
-        StartCoroutine(StartFadeIn(time,sceneName));
+        StartCoroutine(StartFadeIn(time,sceneName, destory));
     }
 
     public void FadeIn(float time)
@@ -89,7 +90,7 @@ public class FadeCanvas : MonoBehaviour
         yield break;
     }
 
-    private IEnumerator StartFadeIn(float time,string sceneName)
+    private IEnumerator StartFadeIn(float time,string sceneName,bool destory)
     {
         faderImg.raycastTarget = true;
         alpha = 0;
@@ -111,6 +112,7 @@ public class FadeCanvas : MonoBehaviour
             yield return null;
         }
         faderImg.raycastTarget = false;
+        if (destory) Destroy(gameObject);
     }
 
     private IEnumerator SimpleFadeIn(float time)

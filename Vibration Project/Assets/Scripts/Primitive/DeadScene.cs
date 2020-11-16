@@ -17,7 +17,7 @@ public class DeadScene : MonoBehaviour
         if (Input.GetMouseButton(0) && isInput == false)
         {
             isInput = true;
-            Fader.FadeInBlack(1f,"Start");
+            Fader.FadeInBlack(1f,"Start",true);
         }
     }
 }

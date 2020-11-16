@@ -132,6 +132,8 @@ void GetSerial() {
 		case'p':
 			OFF(6);
 			break;
+      case'z':
+      Serial.end();
 		}
 	}
 }

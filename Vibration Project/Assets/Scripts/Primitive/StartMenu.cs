@@ -22,7 +22,7 @@ namespace Primitive
         {
             if(isAction == false)
             {
-                Fader.FadeIn(2f, name);
+                Fader.FadeIn(2f, name,true);
                 isAction = true;
             }
 
