@@ -13,7 +13,7 @@ namespace Primitive {
         private bool preAttack = false;
         private Transform _target;
         private float coolCount = 0;
-
+        private bool complete = false;
         public void Init(Transform target)
         {
             _target = target;
@@ -34,7 +34,8 @@ namespace Primitive {
 
         public void ToAttack()
         {
-            if (_isAttack) return;
+            if (_isAttack || complete) return;
+            Body.SetActive(true);
             CharacterStand();
             SetAiming();
             _isAttack = true;
@@ -46,7 +47,9 @@ namespace Primitive {
             if (_isAttack == false) return;
             ShootOver();
             CancelAiming();
+            Body.SetActive(false);
             _isAttack = false;
+            complete = true;
         }
 
         private void LookAtTarget()

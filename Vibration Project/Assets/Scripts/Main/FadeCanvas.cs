@@ -61,9 +61,9 @@ public class FadeCanvas : MonoBehaviour
         StartCoroutine(StartFadeOut(time));
     }
 
-    public void FadeIn(float time,string sceneName,bool destory)
+    public void FadeIn(float time,string sceneName)
     {
-        StartCoroutine(StartFadeIn(time,sceneName, destory));
+        StartCoroutine(StartFadeIn(time,sceneName));
     }
 
     public void FadeIn(float time)
@@ -90,7 +90,7 @@ public class FadeCanvas : MonoBehaviour
         yield break;
     }
 
-    private IEnumerator StartFadeIn(float time,string sceneName,bool destory)
+    private IEnumerator StartFadeIn(float time,string sceneName)
     {
         faderImg.raycastTarget = true;
         alpha = 0;
@@ -112,7 +112,7 @@ public class FadeCanvas : MonoBehaviour
             yield return null;
         }
         faderImg.raycastTarget = false;
-        if (destory) Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     private IEnumerator SimpleFadeIn(float time)
@@ -157,7 +157,7 @@ public class FadeCanvas : MonoBehaviour
         //Canvas faderCanvas = fader.GetComponent<Canvas>();
         canvas.sortingOrder = -100;
         faderImg.raycastTarget = false;
-        //Destroy(gameObject);
+        Destroy(gameObject);
         yield break;
     }
 }

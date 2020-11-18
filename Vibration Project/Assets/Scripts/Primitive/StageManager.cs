@@ -102,7 +102,7 @@ namespace Primitive
                 vestManager.DisConect();
             }
 
-            Fader.FadeInBlack(2, "Dead",true);
+            Fader.FadeInBlack(2, "Dead");
         }
 
         private IEnumerator VestInit()
@@ -165,7 +165,7 @@ namespace Primitive
                 enemys[i].StatusUpdate();
                 if(timer - waitTime >= period * i)
                 {
-                    if(enemys[i].IsAttack == false)
+                    if(enemys[i].IsAttack == false )
                     enemys[i].ToAttack();
                 }
             }
