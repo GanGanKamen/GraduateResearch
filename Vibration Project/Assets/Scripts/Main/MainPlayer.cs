@@ -34,6 +34,7 @@ public class MainPlayer : MonoBehaviour
     {
         HitPointsInit();
         _stageManager = stageManager;
+        Body.localEulerAngles = new Vector3(0, mainCamera.transform.localEulerAngles.y, 0);
         _isInit = true;
 
     }

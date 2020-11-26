@@ -14,7 +14,7 @@ public class DeadScene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0) && isInput == false)
+        if (Input.anyKeyDown && isInput == false)
         {
             isInput = true;
             Fader.FadeInBlack(1f,"Start");

@@ -18,6 +18,18 @@ namespace Primitive
             neoButton.onClick.AddListener(() => GotoNext("VibHeat"));
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                GotoNext("Vib");
+            }
+            else if (Input.GetKeyDown(KeyCode.Z))
+            {
+                GotoNext("VibHeat");
+            }
+        }
+
         private void GotoNext(string name)
         {
             if(isAction == false)
