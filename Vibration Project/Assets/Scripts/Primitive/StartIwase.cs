@@ -6,19 +6,34 @@ public class StartIwase : MonoBehaviour
 {
     [SerializeField] private Transform foward;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private Sprite iwase1;
+    [SerializeField] private Sprite iwase2;
+    [SerializeField] private Sprite iwase3;
+    [SerializeField] private AudioClip[] voiceVol1;
+    [SerializeField] private AudioClip[] voiceVol2;
+    [SerializeField] private AudioClip[] voiceVol3;
+    [SerializeField] private AudioClip voiceVol4;
 
+    private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
     private bool canStart = false;
+    private bool preCanStart = false;
     private bool isAction = false;
     // Start is called before the first frame update
     void Start()
     {
-        
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
+        spriteRenderer.sprite = iwase1;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckFront();
+        CheckFrontUpdate();
+        CheckCanStartUpdate();
+        KeyCtrlUpdate();
     }
 
     private void GotoNext(string name)
@@ -27,11 +42,12 @@ public class StartIwase : MonoBehaviour
         {
             Fader.FadeIn(2f, name, true);
             isAction = true;
+            audioSource.PlayOneShot(RandomAudioClip(voiceVol3));
         }
 
     }
 
-    private void CheckFront()
+    private void CheckFrontUpdate()
     {
         var vec = Vector3.Scale((foward.position - transform.position)
             , new Vector3(1, 0, 1)).normalized;
@@ -39,6 +55,69 @@ public class StartIwase : MonoBehaviour
             new Vector3(1, 0, 1));
 
         var dot = Vector3.Dot(vec, cameraVec);
-        Debug.Log(dot); // dot<-0.9f
+        //Debug.Log(dot); // dot<-0.9f
+        if (dot <= -0.9f) canStart = true;
+        else canStart = false;
+    }
+
+    private void CheckCanStartUpdate()
+    {
+        if(canStart != preCanStart)
+        {
+            switch (canStart)
+            {
+                case true:
+                    spriteRenderer.sprite = iwase2;
+                    if (audioSource.isPlaying == false)
+                        audioSource.PlayOneShot(RandomAudioClip(voiceVol2));
+                    break;
+                case false:
+                    spriteRenderer.sprite = iwase1;
+                    if (audioSource.isPlaying == false)
+                        audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
+                    break;
+            }
+
+            preCanStart = canStart;
+        }
+    }
+
+    private void KeyCtrlUpdate()
+    {
+        if (canStart == false) return;
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            GotoNext("Vib");
+        }
+        else if (Input.GetKeyDown(KeyCode.Z))
+        {
+            GotoNext("VibHeat");
+        }
+
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(GameQuit());
+        }
+    }
+
+    private AudioClip RandomAudioClip(AudioClip[] clips)
+    {
+        var size = clips.Length;
+        var r = Random.Range(0, size);
+        return clips[r];
+    }
+
+    private IEnumerator GameQuit()
+    {
+        isAction = true;
+        audioSource.PlayOneShot(voiceVol4);
+        spriteRenderer.sprite = iwase3;
+        while (audioSource.isPlaying) yield return null;
+        yield return new WaitForSeconds(1f);
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_STANDALONE
+      UnityEngine.Application.Quit();
+#endif
     }
 }
