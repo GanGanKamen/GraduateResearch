@@ -79,7 +79,7 @@ public class FadeCanvas : MonoBehaviour
     private IEnumerator StartFadeOut(float time)
     {
         alpha = 1;
-        fadeDelta = Time.deltaTime /time;
+        fadeDelta = Time.deltaTime / time;
         fadeSwitch = 1;
         yield return null;
         while(fadeSwitch != 0)
@@ -97,12 +97,10 @@ public class FadeCanvas : MonoBehaviour
         fadeDelta = Time.deltaTime / time;
 
         fadeSwitch = 2;
-        yield return null;
         while (fadeSwitch != 0)
         {
             yield return null;
         }
-
         load.SetActive(true);
         async = SceneManager.LoadSceneAsync(sceneName);
         while (!async.isDone)

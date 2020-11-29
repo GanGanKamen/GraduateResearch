@@ -9,6 +9,7 @@ public class StartIwase : MonoBehaviour
     [SerializeField] private Sprite iwase1;
     [SerializeField] private Sprite iwase2;
     [SerializeField] private Sprite iwase3;
+    [SerializeField] private Sprite iwase4;
     [SerializeField] private AudioClip[] voiceVol1;
     [SerializeField] private AudioClip[] voiceVol2;
     [SerializeField] private AudioClip[] voiceVol3;
@@ -40,9 +41,10 @@ public class StartIwase : MonoBehaviour
     {
         if (isAction == false)
         {
-            Fader.FadeIn(2f, name, true);
+            Fader.FadeIn(5f, name, true);
             isAction = true;
             audioSource.PlayOneShot(RandomAudioClip(voiceVol3));
+            spriteRenderer.sprite = iwase3;
         }
 
     }
@@ -111,7 +113,7 @@ public class StartIwase : MonoBehaviour
     {
         isAction = true;
         audioSource.PlayOneShot(voiceVol4);
-        spriteRenderer.sprite = iwase3;
+        spriteRenderer.sprite = iwase4;
         while (audioSource.isPlaying) yield return null;
         yield return new WaitForSeconds(1f);
 #if UNITY_EDITOR

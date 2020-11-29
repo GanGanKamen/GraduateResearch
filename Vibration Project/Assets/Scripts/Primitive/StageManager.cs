@@ -20,6 +20,8 @@ namespace Primitive
         [SerializeField] private float waitTime;
         [SerializeField] private GameObject[] enemysOnStage;
         [SerializeField] private HitManager hitManager;
+        [SerializeField] private AudioClip voice1;
+        [SerializeField] private AudioClip voice2;
         private MainPlayer player;
         private List<AiManager> enemys;
         private float timer = 0;
@@ -27,6 +29,7 @@ namespace Primitive
         private bool isWait = false;
         private bool isStart = false;
         private VestManager vestManager;
+        private AudioSource audioSource;
         // Start is called before the first frame update
         void Start()
         {
@@ -109,10 +112,13 @@ namespace Primitive
         {
             vestManager = GameObject.Find("VestManager").GetComponent<VestManager>();
             vestManager.Init();
-            while(vestManager.HasSetGyiro == false)
+            audioSource = GetComponent<AudioSource>();
+            audioSource.PlayOneShot(voice1);
+            while (vestManager.HasSetGyiro == false)
             {
                 yield return null;
             }
+            audioSource.PlayOneShot(voice2);
             Init();
         }
 
