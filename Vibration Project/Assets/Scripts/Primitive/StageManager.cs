@@ -82,14 +82,16 @@ namespace Primitive
                     break;
                 case StageMode.Vib:
                     var dir = vestManager.AngleToHitDirection(angle);
-                    vestManager.StopAllHit();
-                    vestManager.StartHit(dir);
+                    //vestManager.StopAllHit();
+                    //vestManager.StartHit(dir);
+                    vestManager.OneHit(dir);
                     break;
                 case StageMode.VibHeat:
                     var dir0 = vestManager.AngleToHitDirection(angle);
                     vestManager.StartBlood(dir0);
-                    vestManager.StopAllHit();
-                    vestManager.StartHit(dir0);
+                    //vestManager.StopAllHit();
+                    // vestManager.StartHit(dir0);
+                    vestManager.OneHit(dir0);
                     break;
             }
         }

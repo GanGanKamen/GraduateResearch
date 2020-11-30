@@ -66,39 +66,43 @@ public class StartIwase : MonoBehaviour
     {
         if(canStart != preCanStart)
         {
-            switch (canStart)
+            if(isAction == false)
             {
-                case true:
-                    spriteRenderer.sprite = iwase2;
-                    if (audioSource.isPlaying == false)
-                        audioSource.PlayOneShot(RandomAudioClip(voiceVol2));
-                    break;
-                case false:
-                    spriteRenderer.sprite = iwase1;
-                    if (audioSource.isPlaying == false)
-                        audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
-                    break;
+                switch (canStart)
+                {
+                    case true:
+                        spriteRenderer.sprite = iwase2;
+                        if (audioSource.isPlaying == false)
+                            audioSource.PlayOneShot(RandomAudioClip(voiceVol2));
+                        break;
+                    case false:
+                        spriteRenderer.sprite = iwase1;
+                        if (audioSource.isPlaying == false)
+                            audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
+                        break;
+                }
             }
-
+          
             preCanStart = canStart;
         }
     }
 
     private void KeyCtrlUpdate()
     {
-        if (canStart == false) return;
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            GotoNext("Vib");
-        }
-        else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            GotoNext("VibHeat");
-        }
-
-        else if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(GameQuit());
+        }
+        if (canStart)
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                GotoNext("Vib");
+            }
+            else if (Input.GetKeyDown(KeyCode.Z))
+            {
+                GotoNext("VibHeat");
+            }
         }
     }
 
