@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DeadScene : MonoBehaviour
+public class SerialPortStart : MonoBehaviour
 {
-    private bool isInput = false;
+    private void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
     // Start is called before the first frame update
     void Start()
     {
-        
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Iwase");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.anyKeyDown && isInput == false)
-        {
-            isInput = true;
-            Fader.FadeInBlack(1f,"Iwase");
-        }
+        
     }
 }

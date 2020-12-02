@@ -14,12 +14,14 @@ public class StartIwase : MonoBehaviour
     [SerializeField] private AudioClip[] voiceVol2;
     [SerializeField] private AudioClip[] voiceVol3;
     [SerializeField] private AudioClip voiceVol4;
+    [SerializeField] private UnityEngine.UI.Text serialText;
 
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
     private bool canStart = false;
     private bool preCanStart = false;
     private bool isAction = false;
+    private SerialPortUtility.SerialPortUtilityPro serialPort;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,11 @@ public class StartIwase : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
         spriteRenderer.sprite = iwase1;
+        serialPort = GameObject.Find("SerialPort").GetComponent
+            <SerialPortUtility.SerialPortUtilityPro>();
+        serialPort.ReadCompleteEventObject.AddListener(TestRead);
+        serialPort.Open();
+        serialPort.Write("t");
     }
 
     // Update is called once per frame
@@ -35,6 +42,24 @@ public class StartIwase : MonoBehaviour
         CheckFrontUpdate();
         CheckCanStartUpdate();
         KeyCtrlUpdate();
+    }
+
+    public void TestRead(object data)
+    {
+        var text = data as string;
+        float paramater = 0;
+        string[] arr = text.Split(',');
+
+        if (arr.Length < 1) return;
+        
+        var canPerse = float.TryParse(arr[0], out paramater);
+        if (canPerse) paramater = float.Parse(arr[0]);
+        if (!float.IsNaN(paramater))
+        {
+           serialText.text = "Sucess!";
+            serialPort.Close();
+        }
+
     }
 
     private void GotoNext(string name)

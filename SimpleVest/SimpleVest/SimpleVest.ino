@@ -132,8 +132,12 @@ void GetSerial() {
 		case'p':
 			OFF(6);
 			break;
-      case'z':
+    case'z':
       Serial.end();
+      break;
+      case 't':
+      Serial.begin(115200);
+      break;
 		}
 	}
 }

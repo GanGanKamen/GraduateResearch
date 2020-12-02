@@ -41,6 +41,9 @@ public class VestManager : MonoBehaviour
         HitPartsInit();
         isInit = true;
         initParamater = new List<float>();
+        SerialPort = GameObject.Find("SerialPort")
+            .GetComponent<SerialPortUtility.SerialPortUtilityPro>();
+        SerialPort.ReadCompleteEventObject.AddListener(ReadComplateString);
         SerialPort.Close();
         SerialPort.Open();
     }
@@ -171,6 +174,7 @@ public class VestManager : MonoBehaviour
 
     public void DisConect()
     {
+        StopAllCoroutines();
         StopAllBlood();
         StopAllHit();
         SerialPort.Write("z");
@@ -290,6 +294,7 @@ public class VestManager : MonoBehaviour
 
     void OnApplicationQuit()
     {
+        StopAllCoroutines();
         StopAllBlood();
         StopAllHit();
         SerialPort.Write("z");
