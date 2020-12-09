@@ -22,6 +22,7 @@ public class StartIwase : MonoBehaviour
     private bool preCanStart = false;
     private bool isAction = false;
     private SerialPortUtility.SerialPortUtilityPro serialPort;
+    private bool hasTest = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +40,7 @@ public class StartIwase : MonoBehaviour
 
     public void TestRead(object data)
     {
+        if (hasTest) return;
         var text = data as string;
         float paramater = 0;
         string[] arr = text.Split(',');
@@ -49,12 +51,20 @@ public class StartIwase : MonoBehaviour
         if (canPerse) paramater = float.Parse(arr[0]);
         if (!float.IsNaN(paramater))
         {
-           serialText.text = "Sucess!";
-            serialPort.Close();
+            StartCoroutine(SerialTestOver());
         }
 
     }
 
+    private IEnumerator SerialTestOver()
+    {
+        hasTest = true;
+        serialPort.Write("z");
+        yield return new WaitForSeconds(1f);
+        serialPort.Close();
+        serialText.text = "Sucess!";
+        yield break;
+    }
     private IEnumerator SetUpCoroutine()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
