@@ -161,6 +161,7 @@ public class StartIwase : MonoBehaviour
 
     private IEnumerator GameQuit()
     {
+        serialPort.Write("z");
         isAction = true;
         audioSource.PlayOneShot(voiceVol4);
         spriteRenderer.sprite = iwase4;
