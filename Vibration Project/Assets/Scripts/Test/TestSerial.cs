@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TestSerial : MonoBehaviour
 {
-    [SerializeField]Interface.SerialHandler serialHandler;
+    [SerializeField]SerialPortUtility.SerialPortUtilityPro serialHandler;
     [SerializeField] Button onButton;
     [SerializeField] Button offButton;
 
@@ -19,18 +19,27 @@ public class TestSerial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            serialHandler.Write("a");
+            serialHandler.Write("b");
+        }
+        else if (Input.GetKeyDown(KeyCode.S))
+        {
+            serialHandler.Write("b");
+            serialHandler.Close();//ダメ
+        }
     }
 
     private void LED_ON()
     {
-        serialHandler.Write("a1;");
+        serialHandler.Write("a");
         Debug.Log("WriteA");
     }
 
     private void LED_OFF()
     {
-        serialHandler.Write("a0;");
+        serialHandler.Write("b");
         Debug.Log("Write0");
     }
 }

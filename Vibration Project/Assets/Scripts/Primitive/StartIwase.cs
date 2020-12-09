@@ -25,15 +25,8 @@ public class StartIwase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        audioSource = GetComponent<AudioSource>();
-        audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
-        spriteRenderer.sprite = iwase1;
-        serialPort = GameObject.Find("SerialPort").GetComponent
-            <SerialPortUtility.SerialPortUtilityPro>();
-        serialPort.ReadCompleteEventObject.AddListener(TestRead);
-        serialPort.Open();
-        serialPort.Write("t");
+        StartCoroutine(SetUpCoroutine());
+        
     }
 
     // Update is called once per frame
@@ -60,6 +53,24 @@ public class StartIwase : MonoBehaviour
             serialPort.Close();
         }
 
+    }
+
+    private IEnumerator SetUpCoroutine()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
+        spriteRenderer.sprite = iwase1;
+        serialPort = GameObject.Find("SerialPort").GetComponent
+            <SerialPortUtility.SerialPortUtilityPro>();
+        serialPort.ReadCompleteEventObject.AddListener(TestRead);
+        serialPort.Write("z");
+        yield return new WaitForSeconds(1f);
+        serialPort.Close();
+        yield return new WaitForSeconds(1f);
+        serialPort.Open();
+        serialPort.Write("t");
+        yield break;
     }
 
     private void GotoNext(string name)

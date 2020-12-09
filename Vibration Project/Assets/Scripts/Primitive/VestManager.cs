@@ -44,7 +44,6 @@ public class VestManager : MonoBehaviour
         SerialPort = GameObject.Find("SerialPort")
             .GetComponent<SerialPortUtility.SerialPortUtilityPro>();
         SerialPort.ReadCompleteEventObject.AddListener(ReadComplateString);
-        SerialPort.Close();
         SerialPort.Open();
     }
 
@@ -177,7 +176,6 @@ public class VestManager : MonoBehaviour
         StopAllCoroutines();
         StopAllBlood();
         StopAllHit();
-        SerialPort.Write("z");
     }
 
     public void ReadComplateString(object data)
