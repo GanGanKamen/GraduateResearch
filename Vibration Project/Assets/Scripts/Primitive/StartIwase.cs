@@ -23,11 +23,12 @@ public class StartIwase : MonoBehaviour
     private bool isAction = false;
     private SerialPortUtility.SerialPortUtilityPro serialPort;
     private bool hasTest = false;
+    static public bool CheckOnce = false;
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(SetUpCoroutine());
-        
+
     }
 
     // Update is called once per frame
@@ -46,7 +47,7 @@ public class StartIwase : MonoBehaviour
         string[] arr = text.Split(',');
 
         if (arr.Length < 1) return;
-        
+
         var canPerse = float.TryParse(arr[0], out paramater);
         if (canPerse) paramater = float.Parse(arr[0]);
         if (!float.IsNaN(paramater))
@@ -72,14 +73,25 @@ public class StartIwase : MonoBehaviour
         audioSource.PlayOneShot(RandomAudioClip(voiceVol1));
         spriteRenderer.sprite = iwase1;
         serialPort = GameObject.Find("SerialPort").GetComponent
-            <SerialPortUtility.SerialPortUtilityPro>();
-        serialPort.ReadCompleteEventObject.AddListener(TestRead);
-        serialPort.Write("z");
-        yield return new WaitForSeconds(1f);
-        serialPort.Close();
-        yield return new WaitForSeconds(1f);
-        serialPort.Open();
-        serialPort.Write("t");
+           <SerialPortUtility.SerialPortUtilityPro>();
+        if (CheckOnce == false)
+        {
+           
+            serialPort.ReadCompleteEventObject.AddListener(TestRead);
+            serialPort.Write("z");
+            yield return new WaitForSeconds(1f);
+            serialPort.Close();
+            yield return new WaitForSeconds(1f);
+            serialPort.Open();
+            serialPort.Write("t");
+            CheckOnce = true;
+        }
+        else
+        {
+            serialPort.Close();
+            serialText.text = "Sucess!";
+        }
+            
         yield break;
     }
 
@@ -99,7 +111,7 @@ public class StartIwase : MonoBehaviour
     {
         var vec = Vector3.Scale((foward.position - transform.position)
             , new Vector3(1, 0, 1)).normalized;
-        var cameraVec = Vector3.Scale(mainCamera.transform.forward, 
+        var cameraVec = Vector3.Scale(mainCamera.transform.forward,
             new Vector3(1, 0, 1));
 
         var dot = Vector3.Dot(vec, cameraVec);
@@ -110,9 +122,9 @@ public class StartIwase : MonoBehaviour
 
     private void CheckCanStartUpdate()
     {
-        if(canStart != preCanStart)
+        if (canStart != preCanStart)
         {
-            if(isAction == false)
+            if (isAction == false)
             {
                 switch (canStart)
                 {
@@ -128,7 +140,7 @@ public class StartIwase : MonoBehaviour
                         break;
                 }
             }
-          
+
             preCanStart = canStart;
         }
     }
